@@ -1,5 +1,11 @@
 package note
-import note.Note.Rank
+import note.Note.{
+  Rank,
+  accidentalToDelta,
+  halfStepsInOctave,
+  letterToRank,
+  rankToLetter
+}
 
 import scala.util.matching.Regex
 
@@ -20,30 +26,70 @@ import scala.util.matching.Regex
 case class Note private (name: String, rank: Rank) {
 
   /**
-    * Returns this note, but any excess accidentals in its name are removed.
-    * This converts double accidentals into a whole step, and any
-    * sharps or flats will "cancel" each other out.
-    * @return a Note with its excess accidentals removed.
+    * Returns this note, but any conflicting accidentals in its name are
+    * removed. Any sharps or flats will "cancel" each other out.
+    * @return a Note with its conflicting accidentals removed.
     */
-  def reduceAccidentals: Note = ???
+  def clearConflictingAccidentals: Note = {
+    val accidentalCount = name
+      .drop(1)
+      .foldLeft(0)((acc, c) => acc + accidentalToDelta(c))
+    val accidental =
+      if (accidentalCount > 0) Note.sharp else Note.flat
+    new Note(name.head + accidental.toString * math.abs(accidentalCount), rank)
+  }
+
+  /**
+    * Converts a note's name to the closest note after factoring the
+    * accidentals, for instance "B#" will become "C", while "Dbb" will become
+    * "C". If there is still is an accidental, it will remain after the
+    * operation.
+    * @return a note with a name that has been converted to the nearest note.
+    */
+  def nearestNote: Note = {
+    val clearedNote = clearConflictingAccidentals
+
+    val (newLetter, leftOverAccidentals) =
+      clearedNote.name.drop(1).foldLeft((name.head, 0)) {
+        case ((letter: Char, acc: Int), char: Char) =>
+          val delta = accidentalToDelta(char)
+          val newRank = math.floorMod(letterToRank(letter) + acc + delta,
+                                      Note.halfStepsInOctave)
+          if (rankToLetter.contains(newRank))
+            (rankToLetter(newRank), 0)
+          else
+            (letter, acc + delta)
+      }
+    val accidental = if (leftOverAccidentals > 0) Note.sharp else Note.flat
+    new Note(
+      newLetter.toString + accidental.toString * math.abs(leftOverAccidentals),
+      rank)
+  }
 
   /**
     * Sharpens this note by 1 half step.
     * @return a sharpened Note
     */
-  def sharp: Note = Note(name + Note.sharp, rank + 1)
+  def sharp: Note = new Note(name + Note.sharp, rank + 1)
 
   /**
     * Flattens this note by one half step.
     * @return
     */
-  def flat: Note = Note(name + Note.flat, rank - 1)
+  def flat: Note = new Note(name + Note.flat, rank - 1)
 
   /**
     *
     * @return
     */
-  override def toString: String = s"$name"
+  override def toString: String = s"$name-$octave"
+
+  /**
+    * Returns the octave for this note. Edge cases like "B#-0" will spill into
+    * the next octave
+    * @return The octave of this note.
+    */
+  def octave: Int = math.floorDiv(rank, halfStepsInOctave)
 }
 
 object Note {
@@ -59,23 +105,29 @@ object Note {
   val noteRegex: Regex = s"[A-G]($sharp|$flat)*".r
 
   /**
-    * Creates a note. If the note name is not valid, returns None.
+    * Creates a note in the 4th octave. If the note name is not valid, returns
+    * None.
     * @param name A name for the note.
     * @return Some note if the note name is valid, None otherwise.
     */
-  def apply(name: String): Option[Note] = {
-    if (noteRegex.matches(name))
-      Some(Note(name, nameToRank(name)))
-    else None
+  def apply(name: String): Option[Note] = Note(name, 4)
+
+  /**
+    * Creates a note. If the note name is not valid, returns None.
+    * @param name A name for the note.
+    * @param octave The octave of the note.
+    * @return Some note if the note name is valid, None otherwise.
+    */
+  def apply(name: String, octave: Int): Option[Note] = {
+    if (noteRegex.matches(name)) {
+      Some(new Note(name, octave * halfStepsInOctave + nameToRank(name)))
+    } else None
   }
 
   // Internal mapping of name to a rank, assumes noteRegex matches
   private def nameToRank(name: String): Rank =
     name.drop(1).foldLeft(letterToRank(name.head)) { (rank: Int, char: Char) =>
-      char match {
-        case Note.sharp => rank + 1
-        case Note.flat  => rank - 1
-      }
+      rank + accidentalToDelta(char)
     }
 
   // C marks the start of the octave
@@ -88,4 +140,10 @@ object Note {
     'A' -> 9,
     'B' -> 11
   )
+
+  private val rankToLetter = for ((k, v) <- letterToRank) yield (v, k)
+  private def accidentalToDelta(char: Char) = char match {
+    case Note.sharp => 1
+    case Note.flat  => -1
+  }
 }
