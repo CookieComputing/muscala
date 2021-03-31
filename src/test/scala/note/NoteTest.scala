@@ -52,9 +52,7 @@ object NoteTest extends Properties("Note") {
     forAll(noteGen) { note: Note =>
       {
         val originalAccidentalCount = note.name.drop(1).length
-        note.clearConflictingAccidentals.name
-          .drop(1)
-          .length <= originalAccidentalCount
+        note.clearConflictingAccidentals.accidentals.length <= originalAccidentalCount
       }
     }
 
@@ -62,8 +60,8 @@ object NoteTest extends Properties("Note") {
     forAll(accidentalNoteGen) { note: Note =>
       {
         val clearedNote = note.clearConflictingAccidentals
-        val sharpCount = clearedNote.name.drop(1).count(_ == Note.sharp)
-        val flatCount = clearedNote.name.drop(1).count(_ == Note.flat)
+        val sharpCount = clearedNote.accidentals.count(_ == Note.sharp)
+        val flatCount = clearedNote.accidentals.count(_ == Note.flat)
         (sharpCount == 0 && flatCount > 0) ||
         (sharpCount > 0 && flatCount == 0) ||
         (sharpCount == 0 && flatCount == 0)
@@ -80,13 +78,13 @@ object NoteTest extends Properties("Note") {
     forAll(accidentalNoteGen) { note: Note =>
       {
         def accidentalCount(n: Note, char: Char) =
-          n.name.drop(1).count(_ == char)
+          n.accidentals.count(_ == char)
         val originalSharpCount = accidentalCount(note, Note.sharp)
         val originalFlatCount = accidentalCount(note, Note.flat)
 
         val clearedNote = note.clearConflictingAccidentals
-        val sharpCount = clearedNote.name.drop(1).count(_ == Note.sharp)
-        val flatCount = clearedNote.name.drop(1).count(_ == Note.flat)
+        val sharpCount = clearedNote.accidentals.count(_ == Note.sharp)
+        val flatCount = clearedNote.accidentals.count(_ == Note.flat)
 
         if (originalFlatCount > originalSharpCount)
           flatCount == originalFlatCount - originalSharpCount && sharpCount == 0
@@ -113,7 +111,7 @@ object NoteTest extends Properties("Note") {
 
   property("nearestNoteHasOneAccidentalAtMost") = forAll(accidentalNoteGen) {
     note: Note =>
-      (note.nearestNote.name.drop(1).length <= 1) :| s"Note did not have " +
+      (note.nearestNote.accidentals.length <= 1) :| s"Note did not have " +
         s"at most one accidental: ${note.nearestNote.name}"
   }
 

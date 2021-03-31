@@ -1,6 +1,7 @@
 package note
 import note.Note.{
   Rank,
+  accidentFromCount,
   accidentalToDelta,
   halfStepsInOctave,
   letterToRank,
@@ -32,13 +33,13 @@ case class Note private (name: String, rank: Rank) {
     * @return a Note with its conflicting accidentals removed.
     */
   def clearConflictingAccidentals: Note = {
-    val accidentalCount = name
+    val accidentalCount = accidentals.count(_ == Note.sharp) - name
       .drop(1)
-      .foldLeft(0)((acc, c) => acc + accidentalToDelta(c))
-    val accidental = {
-      if (accidentalCount > 0) Note.sharp else Note.flat
-    }
-    new Note(newAccidentalName(name.head, accidental, accidentalCount), rank)
+      .count(_ == Note.flat)
+    new Note(newAccidentalName(letter,
+                               accidentFromCount(accidentalCount),
+                               accidentalCount),
+             rank)
   }
 
   /**
@@ -52,7 +53,7 @@ case class Note private (name: String, rank: Rank) {
     val clearedNote = clearConflictingAccidentals
 
     val (newLetter, leftOverAccidentals) =
-      clearedNote.name.drop(1).foldLeft((name.head, 0)) {
+      clearedNote.accidentals.foldLeft((letter, 0)) {
         case ((letter: Char, acc: Int), char: Char) =>
           val delta = accidentalToDelta(char)
           val newRank = math.floorMod(letterToRank(letter) + acc + delta,
@@ -62,8 +63,9 @@ case class Note private (name: String, rank: Rank) {
           else
             (letter, acc + delta)
       }
-    val accidental = if (leftOverAccidentals > 0) Note.sharp else Note.flat
-    new Note(newAccidentalName(newLetter, accidental, leftOverAccidentals),
+    new Note(newAccidentalName(newLetter,
+                               accidentFromCount(leftOverAccidentals),
+                               leftOverAccidentals),
              rank)
   }
 
@@ -80,8 +82,20 @@ case class Note private (name: String, rank: Rank) {
   def flat: Note = new Note(name + Note.flat, rank - 1)
 
   /**
-    *
-    * @return
+    * Returns the note's letter, for instance the Note "C#-4" will return 'C'.
+    * @return The note's letter
+    */
+  def letter: Char = name.head
+
+  /**
+    * Returns the accidentals of the note. for instance "C#-4" will return "#".
+    * @return The note's accidentals
+    */
+  def accidentals: String = name.drop(1)
+
+  /**
+    * Returns a string version of this note
+    * @return A string containing the name of the note and its octave
     */
   override def toString: String = s"$name-$octave"
 
@@ -142,13 +156,19 @@ object Note {
     'B' -> 11
   )
 
-  private val rankToLetter = for ((k, v) <- letterToRank) yield (v, k)
   private def accidentalToDelta(char: Char) = char match {
     case Note.sharp => 1
     case Note.flat  => -1
   }
+  private val rankToLetter = for ((k, v) <- letterToRank) yield (v, k)
 
   // Helper to perform absolute value on the count of accidentals
   private def newAccidentalName(letter: Char, accidental: Char, times: Int) =
     letter.toString + (accidental.toString * math.abs(times))
+
+  // Helper to determine if the accidental to be used should be sharp or flat
+  private def accidentFromCount(count: Int) =
+    if (count > 0) Note.sharp
+    else
+      Note.flat
 }
