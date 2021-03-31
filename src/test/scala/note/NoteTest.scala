@@ -61,6 +61,11 @@ object NoteTest extends Properties("Note") {
     }
   }
 
+  property("sharpAndFlatNeutralizeEachOther") = forAll(noteGen) { note: Note =>
+    note.sharp.flat.rank == note.flat.sharp.rank &&
+    note.flat.sharp.rank == note.rank
+  }
+
   property("clearConflictingCharactersHasLessThanOrEqualToOriginalCount") =
     forAll(noteGen) { note: Note =>
       {
@@ -107,6 +112,13 @@ object NoteTest extends Properties("Note") {
           sharpCount == originalSharpCount - originalFlatCount && flatCount == 0
         else sharpCount == 0 && flatCount == 0
       }
+    }
+
+  property("clearConflictingAccidentalsShouldRemoveSharpFlatNote") =
+    forAll(naturalNoteGen) { note: Note =>
+      val alteredNote = note.sharp.flat
+      val clearedNote = alteredNote.clearConflictingAccidentals
+      note.name == clearedNote.name
     }
 
   property("nearestNotePreservesRank") = forAll(accidentalNoteGen) {
