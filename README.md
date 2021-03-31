@@ -14,7 +14,10 @@ This project is also a hobby of mine as I learn more about music theory! I will
 occasionally visit this library and add new concepts that I learn.
 
 ## Contributing
-Feel free to open up a pull request, and I'll happily review it!
+Feel free to open up a pull request, and I'll happily review it! I do ask that
+any PRs introducing new code contains documentations for the public functions
+at the bare minimum, but other than that, we can have a discussion in the
+PR section!
 
 ## License
 This project is under the MIT License, please look at the license for more
