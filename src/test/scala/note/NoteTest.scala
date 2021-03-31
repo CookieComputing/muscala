@@ -135,13 +135,18 @@ object NoteTest extends Properties("Note") {
         s"at most one accidental: ${note.nearestNote.name}"
   }
 
-  property("oneOctaveAboveNaturalIsTwelveHalfSteps") = forAll(noteGen) {
-    note: Note =>
-      // There are minor edge cases like B# which will up the octave
-      // unexpectedly, which is why we use nearest note
-      val clearNote = note.nearestNote
-      val octaveNote = Note(clearNote.name, note.octave + 1).get
-      (octaveNote.rank == clearNote.rank + 12) :| s"note, rank: $clearNote, " +
-        s"${clearNote.rank} | octave note, rank: $octaveNote, ${octaveNote.rank}"
+  property("oneOctaveIsTwelveHalfSteps") = forAll(noteGen) { note: Note =>
+    // There are minor edge cases like B# which will up the octave
+    // unexpectedly, which is why we use nearest note
+    val clearNote = note.nearestNote
+    val aboveOctaveNote = Note(clearNote.name, note.octave + 1).get
+    val belowOctaveNote = Note(clearNote.name, note.octave - 1).get
+
+    (aboveOctaveNote.rank == clearNote.rank + 12) :| s"note, rank: $clearNote, " +
+      s"${clearNote.rank} | above octave note, rank: $aboveOctaveNote, " +
+      s"${aboveOctaveNote.rank}" &&
+    (belowOctaveNote.rank == clearNote.rank - 12) :| s"note, rank: $clearNote, " +
+      s"${clearNote.rank} | below octave note, rank: $belowOctaveNote, " +
+      s"${belowOctaveNote.rank}"
   }
 }
