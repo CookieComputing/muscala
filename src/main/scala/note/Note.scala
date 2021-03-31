@@ -1,4 +1,5 @@
 package note
+import interval.{MajorInterval, MinorInterval, PerfectInterval}
 import note.Note.{
   Rank,
   accidentFromCount,
@@ -26,6 +27,24 @@ import scala.util.matching.Regex
   * the note's name.
   */
 case class Note private (name: String, rank: Rank) {
+
+  /**
+    * Creates a MajorInterval intermediary movement for this note.
+    * @return A MajorInterval intermediary movement
+    */
+  def major: MajorInterval = MajorInterval(this)
+
+  /**
+    * Creates a MinorInterval intermediary movement for this note.
+    * @return A MinorInterval intermediary movement
+    */
+  def minor: MinorInterval = MinorInterval(this)
+
+  /**
+    * Creates a PerfectInterval intermediary movement for this note.
+    * @return A PerfectInterval intermediary movement
+    */
+  def perfect: PerfectInterval = PerfectInterval(this)
 
   /**
     * Returns this note, but any conflicting accidentals in its name are
