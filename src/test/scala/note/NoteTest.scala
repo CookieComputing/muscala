@@ -47,14 +47,15 @@ object NoteTest extends Properties("Note") {
       }
   }
 
-  property("sharpNoteOneHalfStepAboveNatural") = forAll(noteGen) { note: Note =>
-    {
-      val sharpNote = note.sharp
-      sharpNote.rank == note.rank + 1
-    }
+  property("sharpNoteOneHalfStepAbovePrevious") = forAll(noteGen) {
+    note: Note =>
+      {
+        val sharpNote = note.sharp
+        sharpNote.rank == note.rank + 1
+      }
   }
 
-  property("flatNoteOneHalfStepBelowNatural") = forAll(noteGen) { note: Note =>
+  property("flatNoteOneHalfStepBelowPrevious") = forAll(noteGen) { note: Note =>
     {
       val flatNote = note.flat
       flatNote.rank == note.rank - 1
