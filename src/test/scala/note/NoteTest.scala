@@ -28,24 +28,6 @@ object NoteTest extends Properties("Note") {
     accidental <- Gen.oneOf(List(Note.flat, Note.sharp))
   } yield Note(note.name + accidental, note.octave).get
 
-  // A sharp note is one half step above its natural
-  property("sharpNoteOneHalfStepAboveNatural") = forAll(naturalNoteGen) {
-    naturalNote: Note =>
-      {
-        val sharpNote = naturalNote.sharp
-        sharpNote.rank == naturalNote.rank + 1
-      }
-  }
-
-  // A flat note is one half step below its natural
-  property("flatNoteOneHalfStepBelowNatural") = forAll(naturalNoteGen) {
-    naturalNote: Note =>
-      {
-        val flatNote = naturalNote.flat
-        flatNote.rank == naturalNote.rank - 1
-      }
-  }
-
   property("sharpNoteOneHalfStepAbovePrevious") = forAll(noteGen) {
     note: Note =>
       {
