@@ -4,6 +4,7 @@ import note.Note.{
   accidentalToDelta,
   halfStepsInOctave,
   letterToRank,
+  newAccidentalName,
   rankToLetter
 }
 
@@ -34,9 +35,10 @@ case class Note private (name: String, rank: Rank) {
     val accidentalCount = name
       .drop(1)
       .foldLeft(0)((acc, c) => acc + accidentalToDelta(c))
-    val accidental =
+    val accidental = {
       if (accidentalCount > 0) Note.sharp else Note.flat
-    new Note(name.head + accidental.toString * math.abs(accidentalCount), rank)
+    }
+    new Note(newAccidentalName(name.head, accidental, accidentalCount), rank)
   }
 
   /**
@@ -61,9 +63,8 @@ case class Note private (name: String, rank: Rank) {
             (letter, acc + delta)
       }
     val accidental = if (leftOverAccidentals > 0) Note.sharp else Note.flat
-    new Note(
-      newLetter.toString + accidental.toString * math.abs(leftOverAccidentals),
-      rank)
+    new Note(newAccidentalName(newLetter, accidental, leftOverAccidentals),
+             rank)
   }
 
   /**
@@ -146,4 +147,8 @@ object Note {
     case Note.sharp => 1
     case Note.flat  => -1
   }
+
+  // Helper to perform absolute value on the count of accidentals
+  private def newAccidentalName(letter: Char, accidental: Char, times: Int) =
+    letter.toString + (accidental.toString * math.abs(times))
 }
