@@ -11,17 +11,16 @@ object NoteTest extends Properties("Note") {
   val noteLetterGen: Gen[Char] =
     Gen.oneOf(List('A', 'B', 'C', 'D', 'E', 'F', 'G'))
 
+  val accidentalGen: Gen[Char] = Gen.oneOf(List(Note.flat, Note.sharp))
   val naturalNoteGen: Gen[Note] = for {
     letter <- noteLetterGen
   } yield Note(letter.toString).get
 
   val noteGen: Gen[Note] = for {
     letter <- noteLetterGen
-    numOfAccidentals <- Gen.chooseNum(0, 2)
-    accidentals <- Gen.listOfN(
-      numOfAccidentals,
-      Gen.oneOf(Gen.const(Note.flat), Gen.const(Note.sharp)))
-    octave <- Gen.chooseNum(0, 5)
+    numOfAccidentals <- Gen.chooseNum(0, 1000)
+    accidentals <- Gen.listOfN(numOfAccidentals, accidentalGen)
+    octave <- Gen.chooseNum(-1000, 1000)
   } yield Note(letter.toString + accidentals.mkString(""), octave).get
 
   val accidentalNoteGen: Gen[Note] = for {
@@ -126,6 +125,9 @@ object NoteTest extends Properties("Note") {
     note: Note =>
       note.nearestNote.rank == note.rank
   }
+
+  // TODO: Maybe add a property that verifies that nearest note will change
+  //  a note, idk
 
   property("nearestNoteHasOneAccidentalAtMost") = forAll(accidentalNoteGen) {
     note: Note =>
