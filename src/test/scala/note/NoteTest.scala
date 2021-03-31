@@ -11,16 +11,23 @@ object NoteTest extends Properties("Note") {
   val noteLetterGen: Gen[Char] =
     Gen.oneOf(List('A', 'B', 'C', 'D', 'E', 'F', 'G'))
 
-  val accidentalGen: Gen[Char] = Gen.oneOf(List(Note.flat, Note.sharp))
   val naturalNoteGen: Gen[Note] = for {
     letter <- noteLetterGen
   } yield Note(letter.toString).get
+
+  val noteGen: Gen[Note] = for {
+    letter <- noteLetterGen
+    numOfAccidentals <- Gen.chooseNum(0, 1000)
+    accidentals <- Gen.listOfN(
+      numOfAccidentals,
+      Gen.oneOf(Gen.const(Note.flat), Gen.const(Note.sharp)))
+  } yield Note(letter.toString + accidentals.mkString("")).get
 
   // A sharp note is one half step above its natural
   property("sharpNoteOneHalfStepAboveNatural") = forAll(naturalNoteGen) {
     naturalNote: Note =>
       {
-        val sharpNote = Note(naturalNote.name + Note.sharp).get
+        val sharpNote = naturalNote.sharp
         sharpNote.rank == naturalNote.rank + 1
       }
   }
@@ -29,8 +36,22 @@ object NoteTest extends Properties("Note") {
   property("flatNoteOneHalfStepBelowNatural") = forAll(naturalNoteGen) {
     naturalNote: Note =>
       {
-        val flatNote = Note(naturalNote.name + Note.sharp).get
-        flatNote.rank == naturalNote.rank + 1
+        val flatNote = naturalNote.flat
+        flatNote.rank == naturalNote.rank - 1
       }
+  }
+
+  property("sharpNoteOneHalfStepAboveNatural") = forAll(noteGen) { note: Note =>
+    {
+      val sharpNote = note.sharp
+      sharpNote.rank == note.rank + 1
+    }
+  }
+
+  property("flatNoteOneHalfStepBelowNatural") = forAll(noteGen) { note: Note =>
+    {
+      val flatNote = note.flat
+      flatNote.rank == note.rank - 1
+    }
   }
 }

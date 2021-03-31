@@ -29,21 +29,21 @@ case class Note private (name: String, rank: Rank) {
 
   /**
     * Sharpens this note by 1 half step.
-    * @return a Note with -
+    * @return a sharpened Note
     */
-  def sharp: Note = ???
+  def sharp: Note = Note(name + Note.sharp, rank + 1)
 
   /**
     * Flattens this note by one half step.
     * @return
     */
-  def flat: Note = ???
+  def flat: Note = Note(name + Note.flat, rank - 1)
 
   /**
     *
     * @return
     */
-  override def toString: String = super.toString
+  override def toString: String = s"$name"
 }
 
 object Note {
@@ -63,10 +63,11 @@ object Note {
     * @param name A name for the note.
     * @return Some note if the note name is valid, None otherwise.
     */
-  def apply(name: String): Option[Note] =
+  def apply(name: String): Option[Note] = {
     if (noteRegex.matches(name))
       Some(Note(name, nameToRank(name)))
     else None
+  }
 
   // Internal mapping of name to a rank, assumes noteRegex matches
   private def nameToRank(name: String): Rank =
