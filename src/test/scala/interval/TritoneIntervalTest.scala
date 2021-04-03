@@ -13,8 +13,8 @@ class TritoneIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       "fifths") {
     forAll(noteGen) { note: Note =>
       assert(
-        Note.distance(note.tritone, note.augmented.fourth) == 0 &&
-          Note.distance(note.tritone, note.diminished.fifth) == 0
+        Note.enharmonic(note.tritone, note.augmented.fourth) &&
+          Note.enharmonic(note.tritone, note.diminished.fifth)
       )
     }
   }
