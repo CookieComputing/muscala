@@ -195,6 +195,16 @@ object Note {
     */
   def distance(fromNote: Note, toNote: Note): Int = toNote.rank - fromNote.rank
 
+  /**
+    * Determines if two notes are enharmonic. A note is enharmonic if they share
+    * the same pitch.
+    * @param note the first note to check
+    * @param otherNote the second note to compare with
+    * @return whether these two notes are enharmonic
+    */
+  def enharmonic(note: Note, otherNote: Note): Boolean =
+    distance(note, otherNote) == 0
+
   // Internal mapping of name to a rank, assumes noteRegex matches
   private def nameToRank(name: String): Rank =
     name.drop(1).foldLeft(letterToRank(name.head)) { (rank: Int, char: Char) =>

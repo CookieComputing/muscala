@@ -168,7 +168,23 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
   property("a note should be enharmonic with itself") {
     forAll(noteGen) { note: Note =>
-      assert(Note.distance(note, note) == 0)
+      assert(Note.enharmonic(note, note))
+    }
+  }
+
+  property(
+    "a note that has been altered in any way should not enharmonic " +
+      "with itself") {
+    forAll(for {
+      x <- Gen.chooseNum(-10000, 10000) suchThat { _ != 0 }
+      note <- noteGen
+    } yield (note, x)) {
+      case (note: Note, x: Int) =>
+        val op = (n: Note) => if (x > 0) n.sharp else n.flat
+        val alteredNote = (1 to math.abs(x)).foldLeft(note) { (n, _) =>
+          op(n)
+        }
+        assertResult(false)(Note.enharmonic(note, alteredNote))
     }
   }
 }
