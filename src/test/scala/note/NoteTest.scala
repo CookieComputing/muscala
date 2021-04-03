@@ -7,7 +7,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
   * Properties for the Note class.
   */
 class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
-  property("sharpNoteOneHalfStepAbovePrevious") {
+  property("a sharp note is one half step above the previous note") {
     forAll(NoteTest.noteGen) { note: Note =>
       {
         val sharpNote = note.sharp
@@ -16,7 +16,7 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("flatNoteOneHalfStepBelowPrevious") {
+  property("a flat note is one half step below the previous note") {
     forAll(NoteTest.noteGen) { note: Note =>
       {
         val flatNote = note.flat
@@ -25,7 +25,7 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("sharpAndFlatNeutralizeEachOther") {
+  property("a sharp and flat note cancel each other out") {
     forAll(NoteTest.noteGen) { note: Note =>
       assert(
         note.sharp.flat.rank == note.flat.sharp.rank &&
@@ -33,7 +33,9 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("clearConflictingCharactersHasLessThanOrEqualToOriginalCount") {
+  property(
+    "clearConflictingCharacters() has an accidental count <= the" +
+      "original note's accidental count") {
     forAll(NoteTest.noteGen) { note: Note =>
       {
         val originalAccidentalCount = note.name.drop(1).length
@@ -44,7 +46,10 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("clearConflictingCharactersOnlyHasSharpsOrFlatsOrNone") {
+  property(
+    "clearConflictingCharacters" +
+      "() should only have " +
+      "sharps or only flats or neither") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
       {
         val clearedNote = note.clearConflictingAccidentals
@@ -58,14 +63,15 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("clearConflictingCharactersPreservesRank") {
+  property("clearConflictingCharacters() should preserve a note's rank") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
       assert(note.clearConflictingAccidentals.rank == note.rank)
     }
   }
 
   property(
-    "clearConflictingCharactersShouldNotEliminateNonconflictingAccidentals") {
+    "clearConflictingCharacters() should not eliminate accidentals" +
+      "that do not conflict with each other") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
       {
         def accidentalCount(n: Note, char: Char) =
@@ -86,7 +92,9 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("clearConflictingAccidentalsShouldRemoveSharpFlatNote") {
+  property(
+    "clearConflictingAccidentals() should remove notes that were " +
+      "sharped and then flatted") {
     forAll(NoteTest.naturalNoteGen) { note: Note =>
       val alteredNote = note.sharp.flat
       val clearedNote = alteredNote.clearConflictingAccidentals
@@ -94,7 +102,7 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("nearestNotePreservesRank") {
+  property("nearestNote() preserves a note's rank") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
       assert(note.nearestNote.rank == note.rank)
     }
@@ -103,13 +111,13 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   // TODO: Maybe add a property that verifies that nearest note will change
   //  a note, idk
 
-  property("nearestNoteHasOneAccidentalAtMost") {
+  property("nearestNote() causes the note to have one accidental at most") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
       assert(note.nearestNote.accidentals.length <= 1)
     }
   }
 
-  property("oneOctaveIsTwelveHalfSteps") {
+  property("one octave is twelve half steps") {
     forAll(NoteTest.noteGen) { note: Note =>
       // There are minor edge cases like B# which will up the octave
       // unexpectedly, which is why we use nearest note
