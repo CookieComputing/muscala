@@ -4,6 +4,9 @@ import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import note.NoteTest.noteGen
 
+/**
+  * Represents tests for the Minor interval.
+  */
 class MinorIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("a minor second is a half step above the root note") {
     forAll(noteGen) { note: Note =>
