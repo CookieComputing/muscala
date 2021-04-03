@@ -29,8 +29,8 @@ class PerfectIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("a perfect fifth is a stacked major third + minor third") {
     forAll(noteGen) { note: Note =>
       assert(
-        Note.distance(note.major.third.minor.third, note.perfect.fifth) == 0 &&
-          Note.distance(note.minor.third.major.third, note.perfect.fifth) == 0)
+        Note.enharmonic(note.major.third.minor.third, note.perfect.fifth) &&
+          Note.enharmonic(note.minor.third.major.third, note.perfect.fifth))
     }
   }
 
