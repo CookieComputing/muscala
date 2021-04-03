@@ -5,7 +5,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import note.NoteTest.noteGen
 
 /**
-  * Represents tests for the Major interval.
+  * Represents tests for the Augmented interval.
   */
 class AugmentedIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property(
