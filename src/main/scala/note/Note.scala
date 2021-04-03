@@ -179,7 +179,12 @@ object Note {
     */
   def apply(name: String, octave: Int): Option[Note] = {
     if (noteRegex.matches(name)) {
-      Some(new Note(name, octave * halfStepsInOctave + nameToRank(name)))
+      // We have to perform a bit of a hack to extract the note's equivalent
+      // name to re-calculate the rank offset
+      val nearestNoteName = new Note(name, 0).nearestNote.name
+      Some(
+        new Note(name,
+                 octave * halfStepsInOctave + nameToRank(nearestNoteName)))
     } else None
   }
 

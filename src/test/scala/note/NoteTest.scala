@@ -8,6 +8,12 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
   * Properties for the Note class.
   */
 class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
+  property("a note should be copyable from its name and octave") {
+    forAll(NoteTest.noteGen) { note: Note =>
+      assert(note == Note(note.name, note.octave).get)
+    }
+  }
+
   property("a sharp note is one half step above the previous note") {
     forAll(NoteTest.noteGen) { note: Note =>
       {
