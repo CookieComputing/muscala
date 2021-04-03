@@ -2,8 +2,8 @@ package interval
 import note.Note
 
 /**
-  * An intermediary class which can apply a minor interval of some distance to
-  * a given root note.
+  * An intermediary class which can apply an augmented interval of some
+  * distance to a given root note.
   */
 case class AugmentedInterval(root: Note) extends Interval {
   implicit private val op: Note => Note = (note: Note) => note.sharp
