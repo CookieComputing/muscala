@@ -4,7 +4,8 @@ import interval.{
   DiminishedInterval,
   MajorInterval,
   MinorInterval,
-  PerfectInterval
+  PerfectInterval,
+  TritoneInterval
 }
 import note.Note.{
   Rank,
@@ -63,6 +64,12 @@ case class Note private (name: String, rank: Rank) {
     * @return A Diminished intermediary movement
     */
   def diminished: DiminishedInterval = DiminishedInterval(this)
+
+  /**
+    * Creates a tritone away from this note.
+    * @return A tritone
+    */
+  def tritone: Note = TritoneInterval(this).tritoneInterval
 
   /**
     * Returns this note, but any conflicting accidentals in its name are
