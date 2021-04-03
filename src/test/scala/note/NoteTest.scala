@@ -12,7 +12,7 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     forAll(NoteTest.noteGen) { note: Note =>
       {
         val sharpNote = note.sharp
-        assert(sharpNote.rank == note.rank + 1)
+        assert(Note.distance(note, sharpNote) == 1)
       }
     }
   }
@@ -21,7 +21,7 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     forAll(NoteTest.noteGen) { note: Note =>
       {
         val flatNote = note.flat
-        assert(flatNote.rank == note.rank - 1)
+        assert(Note.distance(note, flatNote) == -1)
       }
     }
   }
@@ -127,8 +127,8 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       val belowOctaveNote = Note(clearNote.name, note.octave - 1).get
 
       assert(
-        (aboveOctaveNote.rank == clearNote.rank + 12) &&
-          (belowOctaveNote.rank == clearNote.rank - 12))
+        (Note.distance(clearNote, aboveOctaveNote) == 12) &&
+          (Note.distance(belowOctaveNote, clearNote) == 12))
     }
   }
 
