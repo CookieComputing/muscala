@@ -25,4 +25,10 @@ case class MinorInterval(root: Note) extends Interval {
     * @return a note a minor sixth away from the root
     */
   def sixth: Note = move(8)
+
+  /**
+    * Creates a note a minor seventh away from the root.
+    * @return a note a minor seventh away from the root
+    */
+  def seventh: Note = move(10)
 }
