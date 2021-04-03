@@ -25,4 +25,10 @@ case class MajorInterval(root: Note) extends Interval {
     * @return a note a major sixth away from the root
     */
   def sixth: Note = move(9)
+
+  /**
+    * Creates a note a major seventh away from the root.
+    * @return a note a major seventh away from the root
+    */
+  def seventh: Note = move(11)
 }
