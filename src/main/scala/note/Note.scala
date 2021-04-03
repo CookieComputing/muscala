@@ -1,6 +1,7 @@
 package note
 import interval.{
   AugmentedInterval,
+  DiminishedInterval,
   MajorInterval,
   MinorInterval,
   PerfectInterval
@@ -56,6 +57,12 @@ case class Note private (name: String, rank: Rank) {
     * @return An AugmentedInterval intermediary movement
     */
   def augmented: AugmentedInterval = AugmentedInterval(this)
+
+  /**
+    * Creates a Diminished intermediary movement for this note.
+    * @return A Diminished intermediary movement
+    */
+  def diminished: DiminishedInterval = DiminishedInterval(this)
 
   /**
     * Returns this note, but any conflicting accidentals in its name are
