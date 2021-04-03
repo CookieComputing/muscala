@@ -16,21 +16,21 @@ class PerfectIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
   property("a perfect fourth is a whole step above a major third") {
     forAll(noteGen) { note: Note =>
-      assert(note.perfect.fourth.rank == note.major.third.rank + 1)
+      assert(Note.distance(note.major.third, note.perfect.fourth) == 1)
     }
   }
 
   property("a perfect fourth is a whole step below a perfect fifth") {
     forAll(noteGen) { note: Note =>
-      assert(note.perfect.fourth.rank == note.perfect.fifth.rank - 2)
+      assert(Note.distance(note.perfect.fourth, note.perfect.fifth) == 2)
     }
   }
 
   property("a perfect fifth is a stacked major third + minor third") {
     forAll(noteGen) { note: Note =>
       assert(
-        note.major.third.minor.third.rank == note.perfect.fifth.rank &&
-          note.minor.third.major.third.rank == note.perfect.fifth.rank)
+        Note.distance(note.major.third.minor.third, note.perfect.fifth) == 0 &&
+          Note.distance(note.minor.third.major.third, note.perfect.fifth) == 0)
     }
   }
 
@@ -38,7 +38,7 @@ class PerfectIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     forAll(noteGen) { note: Note =>
       assert(
         note.octave == note.perfect.octave.octave - 1 &&
-          note.rank == note.perfect.octave.rank - Note.halfStepsInOctave)
+          Note.distance(note, note.perfect.octave) == Note.halfStepsInOctave)
     }
   }
 }
