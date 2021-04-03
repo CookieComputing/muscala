@@ -158,6 +158,18 @@ object Note {
     } else None
   }
 
+  /**
+    * Calculates the interval distance between two notes. The comparison is done
+    * by comparing the distance from the "fromNote" to the "toNote": Positive
+    * distances mean that a fromNote is below the toNote, and the opposite holds
+    * true if the distance is negative. A distance of 0 means they are
+    * enharmonic.
+    * @param fromNote the base Note to compare
+    * @param toNote the target Note
+    * @return the distance between the two notes
+    */
+  def distance(fromNote: Note, toNote: Note): Int = toNote.rank - fromNote.rank
+
   // Internal mapping of name to a rank, assumes noteRegex matches
   private def nameToRank(name: String): Rank =
     name.drop(1).foldLeft(letterToRank(name.head)) { (rank: Int, char: Char) =>

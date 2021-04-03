@@ -1,5 +1,6 @@
 package note
-import org.scalacheck.Gen
+import note.NoteTest.noteGen
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
@@ -128,6 +129,46 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       assert(
         (aboveOctaveNote.rank == clearNote.rank + 12) &&
           (belowOctaveNote.rank == clearNote.rank - 12))
+    }
+  }
+
+  property("a sharpened note will always return a positive distance") {
+    forAll(
+      for {
+        // Had to limit the number of times a note was sharpened because of
+        // CPU time
+        x <- Gen.chooseNum(1, 10000)
+        note <- noteGen
+      } yield (note, x)
+    ) {
+      case (note: Note, x: Int) =>
+        val sharpNote = (1 to x).foldLeft(note) { (n, _) =>
+          n.sharp
+        }
+        assert(Note.distance(note, sharpNote) > 0)
+    }
+  }
+
+  property("a flattened note will always return a negative distance") {
+    forAll(
+      for {
+        // Had to limit the number of times a note was sharpened because of
+        // CPU time
+        x <- Gen.chooseNum(1, 10000)
+        note <- noteGen
+      } yield (note, x)
+    ) {
+      case (note: Note, x: Int) =>
+        val flatNote = (1 to x).foldLeft(note) { (n, _) =>
+          n.flat
+        }
+        assert(Note.distance(note, flatNote) < 0)
+    }
+  }
+
+  property("a note should be enharmonic with itself") {
+    forAll(noteGen) { note: Note =>
+      assert(Note.distance(note, note) == 0)
     }
   }
 }
