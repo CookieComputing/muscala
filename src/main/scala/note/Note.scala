@@ -1,5 +1,10 @@
 package note
-import interval.{MajorInterval, MinorInterval, PerfectInterval}
+import interval.{
+  AugmentedInterval,
+  MajorInterval,
+  MinorInterval,
+  PerfectInterval
+}
 import note.Note.{
   Rank,
   accidentFromCount,
@@ -45,6 +50,12 @@ case class Note private (name: String, rank: Rank) {
     * @return A PerfectInterval intermediary movement
     */
   def perfect: PerfectInterval = PerfectInterval(this)
+
+  /**
+    * Creates an AugmentedInterval intermediary movement for this note.
+    * @return An AugmentedInterval intermediary movement
+    */
+  def augmented: AugmentedInterval = AugmentedInterval(this)
 
   /**
     * Returns this note, but any conflicting accidentals in its name are
