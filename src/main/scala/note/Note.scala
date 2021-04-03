@@ -77,8 +77,7 @@ case class Note private (name: String, rank: Rank) {
     * @return a Note with its conflicting accidentals removed.
     */
   def clearConflictingAccidentals: Note = {
-    val accidentalCount = accidentals.count(_ == Note.sharp) - name
-      .drop(1)
+    val accidentalCount = accidentals.count(_ == Note.sharp) - accidentals
       .count(_ == Note.flat)
     new Note(newAccidentalName(letter,
                                accidentFromCount(accidentalCount),
