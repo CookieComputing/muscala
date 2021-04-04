@@ -34,7 +34,9 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   }
 
   property("a major key should have the same notes as it's relative minor") {
-    // TODO: add minor key support
+    forAll(majorKeyGen) { key: MajorKey =>
+      assert(key.degrees.toSet == key.relativeMinor.degrees.toSet)
+    }
   }
 
   property(

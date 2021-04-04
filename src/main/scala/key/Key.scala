@@ -19,6 +19,12 @@ sealed trait Key {
 case class MajorKey(tonic: String) extends Key {
   override val degrees: List[String] =
     MajorKey.generateScales(MajorKey.startingKey, tonic)
+
+  /**
+    * Generates the relative minor of this key
+    * @return the relative minor
+    */
+  def relativeMinor: MinorKey = MinorKey(degrees(5)).get
 }
 
 /**
@@ -27,6 +33,12 @@ case class MajorKey(tonic: String) extends Key {
 case class MinorKey(tonic: String) extends Key {
   override val degrees: List[String] =
     MinorKey.generateScales(MinorKey.startingKey, tonic)
+
+  /**
+    * Generates the relative major of this key
+    * @return the relative major
+    */
+  def relativeMajor: MajorKey = MajorKey(degrees(2)).get
 }
 
 /**
