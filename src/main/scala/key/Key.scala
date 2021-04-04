@@ -48,13 +48,13 @@ object MajorKey extends KeyBuilder {
   private val startingKey = List("C", "D", "E", "F", "G", "A", "B")
 
   // Sharping a key => 5th is now the tonic, 7th of new key is sharp
-  def sharpKey(scales: List[String]): List[String] = {
+  def rotateKeyClockwise(scales: List[String]): List[String] = {
     val newScale = rotateLeft(scales, 4)
     newScale.updated(6, sharpNote(newScale(6)))
   }
 
   // Flatting a key => 4th is now the tonic, 4th of new key is flat
-  def flatKey(scales: List[String]): List[String] = {
+  def rotateKeyCounterClockwise(scales: List[String]): List[String] = {
     val newScale = rotateLeft(scales, 3)
     newScale.updated(3, flatNote(newScale(3)))
   }
@@ -79,13 +79,13 @@ object MinorKey extends KeyBuilder {
   private val startingKey = List("A", "B", "C", "D", "E", "F", "G")
 
   // Sharping a key => 5th is now the tonic, 2nd of new key is sharp
-  def sharpKey(scales: List[String]): List[String] = {
+  def rotateKeyClockwise(scales: List[String]): List[String] = {
     val newScale = rotateLeft(scales, 4)
     newScale.updated(1, sharpNote(newScale(1)))
   }
 
   // Flatting a key => 4th is now the tonic, 6th of new key is flat
-  def flatKey(scales: List[String]): List[String] = {
+  def rotateKeyCounterClockwise(scales: List[String]): List[String] = {
     val newScale = rotateLeft(scales, 3)
     newScale.updated(5, flatNote(newScale(5)))
   }
@@ -116,8 +116,8 @@ protected trait KeyBuilder {
     if (tonic == startingScales.head) startingScales
     else {
       val alterKey = (scales: List[String]) =>
-        if (clockwise(startingScales.head, tonic)) sharpKey(scales)
-        else flatKey(scales)
+        if (clockwise(startingScales.head, tonic)) rotateKeyClockwise(scales)
+        else rotateKeyCounterClockwise(scales)
       generateScales(alterKey(startingScales), tonic)
     }
 
@@ -138,9 +138,13 @@ protected trait KeyBuilder {
     else keyOrdering(currentTonic.head) < keyOrdering(desiredTonic.head)
   }
 
-  def sharpKey(scales: List[String]): List[String]
+  // Given a list of scale degrees, returns the next scale degrees that should
+  // be expected on the circle of fifths when rotating clockwise
+  def rotateKeyClockwise(scales: List[String]): List[String]
 
-  def flatKey(scales: List[String]): List[String]
+  // Given a list of scale degrees, returns the next scale degrees that should
+  // be expected on the circle of fifths when rotating counterclockwise
+  def rotateKeyCounterClockwise(scales: List[String]): List[String]
 
   // Rotates the list left such that the pivot is now at the front of the list.
   def rotateLeft(scales: List[String], pivot: Int): List[String] =
