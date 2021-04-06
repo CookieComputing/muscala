@@ -10,6 +10,7 @@ import scala.util.matching.Regex
   */
 sealed trait Key {
   val tonic: String
+  // For major and minor keys, there is a guarantee that there will be 7 notes.
   val degrees: List[String]
 }
 

@@ -29,7 +29,9 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
   property("a major key should have 7 unique letters in it's scales") {
     forAll(majorKeyGen) { key: MajorKey =>
-      assert(key.degrees.toSet.size == key.degrees.size)
+      assert(
+        key.degrees.toSet.size == key.degrees.size &&
+          key.degrees.size == 7)
     }
   }
 

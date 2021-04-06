@@ -29,7 +29,9 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
   property("a minor key should have 7 unique letters in it's scales") {
     forAll(minorKeyGen) { key: MinorKey =>
-      assert(key.degrees.toSet.size == key.degrees.size)
+      assert(
+        key.degrees.toSet.size == key.degrees.size &&
+          key.degrees.size == 7)
     }
   }
 
