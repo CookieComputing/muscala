@@ -35,6 +35,17 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
+  property(
+    "a minor key should have 7 unique letters in its scales even when" +
+      "adjusted via Note.nearestNote()") {
+    forAll(minorKeyGen) { key: MinorKey =>
+      val adjustedKeyNotes = key.degrees.map(Note(_).get.nearestNote)
+      assert(
+        adjustedKeyNotes.toSet.size == adjustedKeyNotes.size &&
+          adjustedKeyNotes.size == 7)
+    }
+  }
+
   property("a minor key should have the same notes as its relative major") {
     forAll(minorKeyGen) { key: MinorKey =>
       assert(key.degrees.toSet == key.relativeMajor.degrees.toSet)
