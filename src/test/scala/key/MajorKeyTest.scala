@@ -27,7 +27,7 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("a major key should have 7 unique letters in it's scales") {
+  property("a major key should have 7 unique letters in its scales") {
     forAll(majorKeyGen) { key: MajorKey =>
       assert(
         key.degrees.toSet.size == key.degrees.size &&
@@ -35,7 +35,7 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  property("a major key should have the same notes as it's relative minor") {
+  property("a major key should have the same notes as its relative minor") {
     forAll(majorKeyGen) { key: MajorKey =>
       assert(key.degrees.toSet == key.relativeMinor.degrees.toSet)
     }
