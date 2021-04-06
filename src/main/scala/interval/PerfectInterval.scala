@@ -6,7 +6,6 @@ import note.Note
   * a given root note.
   */
 case class PerfectInterval(root: Note) extends Interval {
-  implicit private val op: Note => Note = (note: Note) => note.sharp
 
   /**
     * Creates a note a unison away from the root.

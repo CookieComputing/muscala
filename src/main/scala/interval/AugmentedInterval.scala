@@ -6,7 +6,6 @@ import note.Note
   * distance to a given root note.
   */
 case class AugmentedInterval(root: Note) extends Interval {
-  implicit private val op: Note => Note = (note: Note) => note.sharp
 
   /**
     * Creates a note an augmented unison away from the root.

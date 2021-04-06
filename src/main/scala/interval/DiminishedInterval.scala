@@ -6,7 +6,6 @@ import note.Note
   * distance to a given root note.
   */
 case class DiminishedInterval(root: Note) extends Interval {
-  implicit private val op: Note => Note = (note: Note) => note.sharp
 
   /**
     * Creates a note a diminished second away from the root.

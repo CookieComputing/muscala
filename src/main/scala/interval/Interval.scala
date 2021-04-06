@@ -17,6 +17,8 @@ trait Interval {
   // The root note on which all interval operations will be applied
   val root: Note
 
+  implicit protected val op: Note => Note = (note: Note) => note.sharp
+
   /**
     * Applies a movement of n half steps away from the root note.
     *

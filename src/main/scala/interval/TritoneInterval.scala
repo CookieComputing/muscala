@@ -6,7 +6,6 @@ import note.Note
   * distance to a given root note.
   */
 case class TritoneInterval(root: Note) extends Interval {
-  implicit private val op: Note => Note = (note: Note) => note.sharp
 
   /**
     * Creates a note a tritone away from the root.

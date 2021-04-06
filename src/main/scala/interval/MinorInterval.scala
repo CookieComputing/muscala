@@ -6,7 +6,6 @@ import note.Note
   * a given root note.
   */
 case class MinorInterval(root: Note) extends Interval {
-  implicit private val op: Note => Note = (note: Note) => note.sharp
 
   /**
     * Creates a note a minor second away from the root.
