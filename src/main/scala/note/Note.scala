@@ -1,5 +1,5 @@
 package note
-import interval.{
+import interval.absolute.{
   AugmentedInterval,
   DiminishedInterval,
   MajorInterval,

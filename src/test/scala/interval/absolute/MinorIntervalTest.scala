@@ -1,8 +1,9 @@
-package interval
+package interval.absolute
+
 import note.Note
+import note.NoteTest.noteGen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import note.NoteTest.noteGen
 
 /**
   * Represents tests for the Minor interval.

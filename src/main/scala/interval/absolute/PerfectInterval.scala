@@ -1,4 +1,5 @@
-package interval
+package interval.absolute
+import interval.Interval
 import note.Note
 
 /**

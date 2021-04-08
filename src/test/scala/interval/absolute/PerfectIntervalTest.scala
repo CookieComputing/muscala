@@ -1,4 +1,5 @@
-package interval
+package interval.absolute
+
 import note.Note
 import note.NoteTest.noteGen
 import org.scalatest.propspec.AnyPropSpec
