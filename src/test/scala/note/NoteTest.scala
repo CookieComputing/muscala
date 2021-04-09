@@ -131,15 +131,12 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
   property("one octave is twelve half steps") {
     forAll(NoteTest.noteGen) { note: Note =>
-      // There are minor edge cases like B# which will up the octave
-      // unexpectedly, which is why we use nearest note
-      val clearNote = note.nearestNote
-      val aboveOctaveNote = Note(clearNote.name, note.octave + 1).get
-      val belowOctaveNote = Note(clearNote.name, note.octave - 1).get
+      val aboveOctaveNote = Note(note.name, note.octave + 1).get
+      val belowOctaveNote = Note(note.name, note.octave - 1).get
 
       assert(
-        (Note.distance(clearNote, aboveOctaveNote) == 12) &&
-          (Note.distance(belowOctaveNote, clearNote) == 12))
+        (Note.distance(note, aboveOctaveNote) == 12) &&
+          (Note.distance(belowOctaveNote, note) == 12))
     }
   }
 
