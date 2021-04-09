@@ -19,6 +19,13 @@ any PRs introducing new code contains documentations for the public functions
 at the bare minimum, but other than that, we can have a discussion in the
 PR section!
 
+### Testing
+This project emphasizes [property testing](https://www.scalatest.org/user_guide/property_based_testing) 
+as the primary means of testing code components. While I will accept the 
+standard JUnit-style test (ScalaTest does support a variety of test suite 
+styles), I prefer tested code as property checks. There are occasions where
+table-driven tests may needed, and those are totally fine!
+
 ## License
 This project is under the MIT License, please look at the license for more
 details on what rights you have to this project.
