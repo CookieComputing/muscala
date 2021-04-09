@@ -1,4 +1,5 @@
 package key
+import interval.diatonic.DiatonicInterval
 import key.MinorKeyTest.{circleOfFifthsTable, minorKeyGen}
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
@@ -49,6 +50,15 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("a minor key should have the same notes as its relative major") {
     forAll(minorKeyGen) { key: MinorKey =>
       assert(key.degrees.toSet == key.relativeMajor.degrees.toSet)
+    }
+  }
+
+  property("a minor key should follow the W-H-W-W-H-W-W pattern") {
+    forAll(minorKeyGen) { key: MinorKey =>
+      (key.degrees zip List(2, 1, 2, 2, 1, 2, 2)).forall(tup => {
+        val note = Note(tup._1).get
+        Note.distance(note, DiatonicInterval.second(note)(key).get) == tup._2
+      })
     }
   }
 
