@@ -1,4 +1,5 @@
 package interval.diatonic
+import interval.diatonic.DiatonicIntervalTest.{diatonicOps, keyGen}
 import key.{Key, MajorKeyTest, MinorKeyTest}
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
@@ -6,21 +7,6 @@ import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
 class DiatonicIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
-  val keyGen: Gen[Key] =
-    Gen.oneOf(MajorKeyTest.majorKeyGen, MinorKeyTest.minorKeyGen)
-
-  val diatonicOps: Key => List[Note => Option[Note]] = (key: Key) =>
-    List(
-      DiatonicInterval.unison(_: Note)(key),
-      DiatonicInterval.second(_: Note)(key),
-      DiatonicInterval.third(_: Note)(key),
-      DiatonicInterval.fourth(_: Note)(key),
-      DiatonicInterval.fifth(_: Note)(key),
-      DiatonicInterval.sixth(_: Note)(key),
-      DiatonicInterval.seventh(_: Note)(key),
-      DiatonicInterval.octave(_: Note)(key)
-  )
-
   property(
     "a note that is enharmonic with any note in a key should return a " +
       "new note for any diatonic method") {
@@ -108,4 +94,22 @@ class DiatonicIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
               key.degrees((position + tup._2) % key.degrees.size)))
     }
   }
+}
+
+// Utilities for testing diatonic intervals
+object DiatonicIntervalTest {
+  val keyGen: Gen[Key] =
+    Gen.oneOf(MajorKeyTest.majorKeyGen, MinorKeyTest.minorKeyGen)
+
+  val diatonicOps: Key => List[Note => Option[Note]] = (key: Key) =>
+    List(
+      DiatonicInterval.unison(_: Note)(key),
+      DiatonicInterval.second(_: Note)(key),
+      DiatonicInterval.third(_: Note)(key),
+      DiatonicInterval.fourth(_: Note)(key),
+      DiatonicInterval.fifth(_: Note)(key),
+      DiatonicInterval.sixth(_: Note)(key),
+      DiatonicInterval.seventh(_: Note)(key),
+      DiatonicInterval.octave(_: Note)(key)
+  )
 }
