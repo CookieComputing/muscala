@@ -91,6 +91,18 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       }
     }
   }
+
+  property(
+    "a major key's subdominant key should be the perfect fourth above the " +
+      "key's tonic"
+  ) {
+    forAll(majorKeyGen) { key: MajorKey =>
+      key.subdominantKey match {
+        case MajorKey(tonic) => assertResult(key.degrees(3))(tonic)
+        case MinorKey(_)     => fail("Expected major key")
+      }
+    }
+  }
 }
 
 // Utility for generating

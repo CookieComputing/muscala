@@ -91,6 +91,18 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       }
     }
   }
+
+  property(
+    "a minor key's subdominant key should be the perfect fourth above the " +
+      "key's tonic"
+  ) {
+    forAll(minorKeyGen) { key: MinorKey =>
+      key.subdominantKey match {
+        case MinorKey(tonic) => assertResult(key.degrees(3))(tonic)
+        case MajorKey(_)     => fail("Expected minor key")
+      }
+    }
+  }
 }
 
 // Utility for generating

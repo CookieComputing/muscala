@@ -26,6 +26,13 @@ sealed trait Key {
     * @return the dominant key of this key
     */
   def dominantKey: Key
+
+  /**
+    * Returns the subdominant key of this key, which is the key whose tonic is
+    * a perfect fourth above this key's tonic
+    * @return
+    */
+  def subdominantKey: Key
 }
 
 /**
@@ -52,6 +59,12 @@ case class MajorKey(tonic: String) extends Key {
     * @return the dominant key of this key
     */
   override def dominantKey: Key = MajorKey(degrees(4)).get
+
+  /**
+    * Returns the subdominant key of this key
+    *  @return the subdominant key of this key
+    */
+  override def subdominantKey: Key = MajorKey(degrees(3)).get
 }
 
 /**
@@ -78,6 +91,12 @@ case class MinorKey(tonic: String) extends Key {
     *  @return the dominant key of this key
     */
   override def dominantKey: Key = MinorKey(degrees(4)).get
+
+  /**
+    * Returns the subdominant key of this key
+    *  @return the subdominant key of this key
+    */
+  override def subdominantKey: Key = MinorKey(degrees(3)).get
 }
 
 /**
