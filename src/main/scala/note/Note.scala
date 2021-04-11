@@ -209,6 +209,29 @@ object Note {
   def enharmonic(note: Note, otherNote: Note): Boolean =
     distance(note, otherNote) == 0
 
+  /**
+    * Sharps the name by dropping a flat accidental or adding a sharp accidental
+    * @param name the given note name
+    * @return a sharpened equivalent of that note name
+    */
+  def sharpName(name: String): String =
+    alterName(name, flat.toString, sharp.toString)
+
+  /**
+    * Flats the name by dropping a sharp accidental or adding a flat accidental
+    * @param name the given note name
+    * @return a flattened equivalent of that note name
+    */
+  def flatName(name: String): String =
+    alterName(name, sharp.toString, flat.toString)
+
+  // Helper to abstract logic between flatName() and sharpName()
+  private def alterName(name: String,
+                        toReplace: String,
+                        toAdd: String): String =
+    if (name.endsWith(toReplace)) name.dropRight(1)
+    else name + toAdd
+
   // Internal mapping of name to a rank, assumes noteRegex matches
   private def nameToRank(name: String): Rank =
     name.drop(1).foldLeft(letterToRank(name.head)) { (rank: Int, char: Char) =>
