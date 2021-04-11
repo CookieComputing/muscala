@@ -24,7 +24,7 @@ This project emphasizes [property testing](https://www.scalatest.org/user_guide/
 as the primary means of testing code components. While I will accept the 
 standard JUnit-style test (ScalaTest does support a variety of test suite 
 styles), I prefer tested code as property checks. There are occasions where
-table-driven tests may needed, and those are totally fine!
+table-driven tests may be needed, and those are totally fine!
 
 ## License
 This project is under the MIT License, please look at the license for more
