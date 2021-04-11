@@ -15,6 +15,14 @@ class MajorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   }
 
   property(
+    "when converting to actual notes, the notes return should match " +
+      "the tones of the triad") {
+    forAll(majorTriadGen) { triad: MajorTriad =>
+      assertResult(triad.tones)(triad.toNotes().map(_.name))
+    }
+  }
+
+  property(
     "a major triad should be a major third, and a minor third stacked " +
       "on top") {
     forAll(for {
