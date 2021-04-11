@@ -80,6 +80,17 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       }
     }
   }
+
+  property(
+    "a minor key's dominant key should be the perfect fifth above the " +
+      "key's tonic") {
+    forAll(minorKeyGen) { key: MinorKey =>
+      key.dominantKey match {
+        case MinorKey(tonic) => assertResult(key.degrees(4))(tonic)
+        case MajorKey(_)     => fail("Expected minor key")
+      }
+    }
+  }
 }
 
 // Utility for generating

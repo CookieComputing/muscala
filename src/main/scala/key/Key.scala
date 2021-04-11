@@ -19,6 +19,13 @@ sealed trait Key {
     * @return the parallel key of this key
     */
   def parallelKey: Key
+
+  /**
+    * Returns the dominant key of this key, which is the key whose tonic is a
+    * perfect fifth above this key's tonic.
+    * @return the dominant key of this key
+    */
+  def dominantKey: Key
 }
 
 /**
@@ -39,6 +46,12 @@ case class MajorKey(tonic: String) extends Key {
     *  @return the parallel key of this key
     */
   override def parallelKey: Key = MinorKey(tonic).get
+
+  /**
+    * Returns the dominant key of this key
+    * @return the dominant key of this key
+    */
+  override def dominantKey: Key = MajorKey(degrees(4)).get
 }
 
 /**
@@ -59,6 +72,12 @@ case class MinorKey(tonic: String) extends Key {
     *  @return the parallel key of this key
     */
   override def parallelKey: Key = MajorKey(tonic).get
+
+  /**
+    * Returns the dominant key of this key
+    *  @return the dominant key of this key
+    */
+  override def dominantKey: Key = MinorKey(degrees(4)).get
 }
 
 /**
