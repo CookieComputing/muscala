@@ -1,4 +1,5 @@
 package key
+import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
 import interval.diatonic.DiatonicInterval
 import key.MinorKeyTest.{circleOfFifthsTable, minorKeyGen}
 import note.{Note, NoteTest}
@@ -101,6 +102,32 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
         case MinorKey(tonic) => assertResult(key.degrees(3))(tonic)
         case MajorKey(_)     => fail("Expected minor key")
       }
+    }
+  }
+
+  property(
+    "a minor key's triads should follow the expected chord triads"
+  ) {
+    forAll(minorKeyGen) { key: MinorKey =>
+      key.triads match {
+        case List(MinorTriad(_),
+                  DiminishedTriad(_),
+                  MajorTriad(_),
+                  MinorTriad(_),
+                  MinorTriad(_),
+                  MajorTriad(_),
+                  MajorTriad(_)) =>
+          succeed
+        case _ => fail("triad pattern was not matched")
+      }
+    }
+  }
+
+  property(
+    "the chord tones in each triad in a minor key's triads should be " +
+      "scale degrees found in the minor key") {
+    forAll(minorKeyGen) { key: MinorKey =>
+      key.triads.forall(triad => triad.tones.toSet.subsetOf(key.degrees.toSet))
     }
   }
 }

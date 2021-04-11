@@ -1,4 +1,5 @@
 package key
+import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
 import interval.diatonic.DiatonicInterval
 import key.MajorKeyTest.{circleOfFifthsTable, majorKeyGen}
 import note.{Note, NoteTest}
@@ -101,6 +102,32 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
         case MajorKey(tonic) => assertResult(key.degrees(3))(tonic)
         case MinorKey(_)     => fail("Expected major key")
       }
+    }
+  }
+
+  property(
+    "a major key's triads should follow the expected chord triads"
+  ) {
+    forAll(majorKeyGen) { key: MajorKey =>
+      key.triads match {
+        case List(MajorTriad(_),
+                  MinorTriad(_),
+                  MinorTriad(_),
+                  MajorTriad(_),
+                  MajorTriad(_),
+                  MinorTriad(_),
+                  DiminishedTriad(_)) =>
+          succeed
+        case _ => fail("triad pattern was not matched")
+      }
+    }
+  }
+
+  property(
+    "the chord tones in each triad in a major key's triads should be " +
+      "scale degrees found in the major key") {
+    forAll(majorKeyGen) { key: MajorKey =>
+      key.triads.forall(triad => triad.tones.toSet.subsetOf(key.degrees.toSet))
     }
   }
 }

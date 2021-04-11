@@ -1,4 +1,5 @@
 package key
+import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import note.Note
 import note.Note.{flat, sharp}
 
@@ -33,6 +34,14 @@ sealed trait Key {
     * @return
     */
   def subdominantKey: Key
+
+  /**
+    * Returns the triads that can be formed when starting at each scale
+    * degree. The index of each triad in the list corresponds to the scale
+    * degree used as the tonic of the triad.
+    * @return the list of triads for the key
+    */
+  def triads: List[Triad]
 }
 
 /**
@@ -65,6 +74,17 @@ case class MajorKey(tonic: String) extends Key {
     *  @return the subdominant key of this key
     */
   override def subdominantKey: Key = MajorKey(degrees(3)).get
+
+  override def triads: List[Triad] =
+    (degrees zip List(
+      MajorTriad(_),
+      MinorTriad(_),
+      MinorTriad(_),
+      MajorTriad(_),
+      MajorTriad(_),
+      MinorTriad(_),
+      DiminishedTriad(_)
+    )).map(tup => tup._2(tup._1)).map(_.get)
 }
 
 /**
@@ -97,6 +117,17 @@ case class MinorKey(tonic: String) extends Key {
     *  @return the subdominant key of this key
     */
   override def subdominantKey: Key = MinorKey(degrees(3)).get
+
+  override def triads: List[Triad] =
+    (degrees zip List(
+      MinorTriad(_),
+      DiminishedTriad(_),
+      MajorTriad(_),
+      MinorTriad(_),
+      MinorTriad(_),
+      MajorTriad(_),
+      MajorTriad(_)
+    )).map(tup => tup._2(tup._1)).map(_.get)
 }
 
 /**
