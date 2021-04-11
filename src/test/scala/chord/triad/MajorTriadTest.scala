@@ -17,16 +17,21 @@ class MajorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property(
     "a major triad should be a major third, and a minor third stacked " +
       "on top") {
-    forAll(majorTriadGen) { triad: MajorTriad =>
-      val (root, third, fifth) = triad.toNotes() match {
-        case List(r, t, f) => (r, t, f)
-      }
+    forAll(for {
+      octave <- Gen.chooseNum(-10000, 10000)
+      triad <- majorTriadGen
+    } yield (triad, octave)) {
+      case (triad: MajorTriad, octave: Int) =>
+        val notes = triad.toNotes(octave)
+        val root = notes.head
+        val third = notes(1)
+        val fifth = notes(2)
 
-      assert(
-        Note.enharmonic(root, root.perfect.unison) &&
-          Note.enharmonic(third, root.major.third) &&
-          Note.enharmonic(fifth, third.minor.third)
-      )
+        assert(
+          Note.enharmonic(root, root.perfect.unison) &&
+            Note.enharmonic(third, root.major.third) &&
+            Note.enharmonic(fifth, third.minor.third)
+        )
     }
   }
 

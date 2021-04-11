@@ -102,7 +102,7 @@ object DiatonicInterval {
         .map(Note(_).get.nearestNote)
         .indexWhere(n => n.name == note.nearestNote.name)
 
-      val dest = (origin + interval) % key.degrees.size
+      val dest = Math.floorMod(origin + interval, key.degrees.size)
       val destNote = Note(key.degrees(dest)).get
       Some(sharpUntilSimilar(note, destNote).copy(name = key.degrees(dest)))
     } else None
@@ -116,7 +116,9 @@ object DiatonicInterval {
   // Sharp a note until the note matches the desired note string
   @tailrec
   private def sharpUntilSimilar(note: Note, goal: Note): Note =
-    if ((note.rank % Note.halfStepsInOctave) == (goal.rank % Note.halfStepsInOctave))
+    if (Math.floorMod(note.rank, Note.halfStepsInOctave) == Math.floorMod(
+          goal.rank,
+          Note.halfStepsInOctave))
       note
     else
       sharpUntilSimilar(note.sharp, goal)
