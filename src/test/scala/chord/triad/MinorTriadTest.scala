@@ -20,8 +20,8 @@ class MinorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       key <- minorTriadGen
       octave <- Gen.chooseNum(-10000, 10000)
     } yield (key, octave)) {
-      case (triad: MinorTriad, key: Int) =>
-        val notes = triad.toNotes()
+      case (triad: MinorTriad, octave: Int) =>
+        val notes = triad.toNotes(octave)
         val root = notes.head
         val third = notes(1)
         val fifth = notes(2)
