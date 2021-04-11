@@ -24,7 +24,7 @@ class MajorSeventhTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       seventh <- majorSeventhChordGen
       key <- MajorKey(seventh.tonic)
     } yield (seventh, key)) {
-      case Some((seventh: MajorSeventh, key: MajorKey)) => {
+      case Some((seventh: MajorSeventh, key: MajorKey)) =>
         assert(
           seventh.root == key.degrees.head &&
             seventh.third == key.degrees(2) &&
@@ -35,7 +35,6 @@ class MajorSeventhTest extends AnyPropSpec with ScalaCheckPropertyChecks {
                                   key.degrees(4),
                                   key.degrees(6))
         )
-      }
     }
   }
 
