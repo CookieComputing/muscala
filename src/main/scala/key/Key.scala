@@ -12,6 +12,13 @@ sealed trait Key {
   val tonic: String
   // For major and minor keys, there is a guarantee that there will be 7 notes.
   val degrees: List[String]
+
+  /**
+    * Returns the parallel key of this key. For instance, if this key was C
+    * major, returns C minor
+    * @return the parallel key of this key
+    */
+  def parallelKey: Key
 }
 
 /**
@@ -26,6 +33,12 @@ case class MajorKey(tonic: String) extends Key {
     * @return the relative minor
     */
   def relativeMinor: MinorKey = MinorKey(degrees(5)).get
+
+  /**
+    * Returns the minor key parallel to this major key
+    *  @return the parallel key of this key
+    */
+  override def parallelKey: Key = MinorKey(tonic).get
 }
 
 /**
@@ -40,6 +53,12 @@ case class MinorKey(tonic: String) extends Key {
     * @return the relative major
     */
   def relativeMajor: MajorKey = MajorKey(degrees(2)).get
+
+  /**
+    * Returns the major key parallel to this minor key
+    *  @return the parallel key of this key
+    */
+  override def parallelKey: Key = MajorKey(tonic).get
 }
 
 /**

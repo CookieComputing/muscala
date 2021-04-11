@@ -71,6 +71,15 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
         assert(MajorKey(tonic).get.degrees == expectedDegrees)
     }
   }
+
+  property("a major key's parallel should be a minor key with the same tonic") {
+    forAll(majorKeyGen) { key: MajorKey =>
+      key.parallelKey match {
+        case MinorKey(tonic) => assertResult(key.tonic)(tonic)
+        case MajorKey(_)     => fail("Expected minor key")
+      }
+    }
+  }
 }
 
 // Utility for generating
