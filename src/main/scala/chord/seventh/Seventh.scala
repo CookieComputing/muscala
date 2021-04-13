@@ -13,10 +13,10 @@ trait Seventh extends Chord {
   protected val key: Key
 
   override lazy val tones: List[String] = List(
-    key.degrees.head,
-    key.degrees(2),
-    key.degrees(4),
-    key.degrees(6)
+    root,
+    third,
+    fifth,
+    seventh
   )
 
   // Alias for the tonic
