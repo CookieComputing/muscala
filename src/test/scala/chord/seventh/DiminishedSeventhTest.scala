@@ -59,7 +59,7 @@ class DiminishedSeventhTest
     "when converting to actual notes, the notes returned should match " +
       "the tones of the seventh chord") {
     forAll(for {
-      seventh <- Gen.const(DiminishedSeventh("B").get)
+      seventh <- diminishedSeventhChordGen
       octave <- Gen.chooseNum(-10000, 10000)
     } yield (seventh, octave)) {
       case (seventh: DiminishedSeventh, octave: Int) =>
