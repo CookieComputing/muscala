@@ -23,7 +23,7 @@ class DiminishedSeventhTest
       "diminished triad and diminished seventh") {
     forAll(diminishedSeventhChordGen) { seventh: DiminishedSeventh =>
       {
-        val diminishedTriad = DiminishedSeventh(seventh.tonic).value
+        val diminishedTriad = DiminishedTriad(seventh.tonic).value
         val key = MinorKey(seventh.tonic).value
 
         assert(
