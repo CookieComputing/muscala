@@ -127,7 +127,8 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     "the chord tones in each triad in a minor key's triads should be " +
       "scale degrees found in the minor key") {
     forAll(minorKeyGen) { key: MinorKey =>
-      key.triads.forall(triad => triad.tones.toSet.subsetOf(key.degrees.toSet))
+      assert(key.triads.forall(triad =>
+        triad.tones.toSet.subsetOf(key.degrees.toSet)))
     }
   }
 }

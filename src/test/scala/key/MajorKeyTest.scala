@@ -1,4 +1,10 @@
 package key
+import chord.seventh.{
+  DominantSeventh,
+  HalfDiminishedSeventh,
+  MajorSeventh,
+  MinorSeventh
+}
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
 import interval.diatonic.DiatonicInterval
 import key.MajorKeyTest.{circleOfFifthsTable, majorKeyGen}
@@ -127,7 +133,8 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     "the chord tones in each triad in a major key's triads should be " +
       "scale degrees found in the major key") {
     forAll(majorKeyGen) { key: MajorKey =>
-      key.triads.forall(triad => triad.tones.toSet.subsetOf(key.degrees.toSet))
+      assert(key.triads.forall(triad =>
+        triad.tones.toSet.subsetOf(key.degrees.toSet)))
     }
   }
 }
