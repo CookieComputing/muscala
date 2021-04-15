@@ -47,11 +47,16 @@ class MajorSeventhTest
   property(
     "a major seventh chord should have the intervals of a major triad," +
       " along with a major seventh interval") {
-    forAll(majorSeventhChordGen) { seventh: MajorSeventh =>
-      val triad = MajorTriad(seventh.tonic)
-      val triadNotes = triad.value.toNotes()
-      ((triadNotes ++ List(triadNotes.head.major.seventh)) zip
-        seventh.toNotes()).forall((Note.enharmonic _).tupled)
+    forAll(for {
+      seventh <- majorSeventhChordGen
+      octave <- Gen.chooseNum(-10000, 10000)
+    } yield (seventh, octave)) {
+      case (seventh: MajorSeventh, octave: Int) =>
+        val triad = MajorTriad(seventh.tonic)
+        val triadNotes = triad.value.toNotes(octave)
+        assert(
+          ((triadNotes ++ List(triadNotes.head.major.seventh)) zip
+            seventh.toNotes(octave)).forall((Note.enharmonic _).tupled))
     }
   }
 

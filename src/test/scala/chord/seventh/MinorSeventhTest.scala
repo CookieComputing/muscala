@@ -44,11 +44,16 @@ class MinorSeventhTest
   property(
     "a minor seventh chord should have the intervals of a minor triad," +
       " along with a minor seventh interval") {
-    forAll(minorSeventhChordGen) { seventh: MinorSeventh =>
-      val triad = MinorTriad(seventh.tonic)
-      val triadNotes = triad.value.toNotes()
-      ((triadNotes ++ List(triadNotes.head.minor.seventh)) zip
-        seventh.toNotes()).forall((Note.enharmonic _).tupled)
+    forAll(for {
+      seventh <- minorSeventhChordGen
+      octave <- Gen.chooseNum(-10000, 10000)
+    } yield (seventh, octave)) {
+      case (seventh: MinorSeventh, octave: Int) =>
+        val triad = MinorTriad(seventh.tonic)
+        val triadNotes = triad.value.toNotes(octave)
+        assert(
+          ((triadNotes ++ List(triadNotes.head.minor.seventh)) zip
+            seventh.toNotes(octave)).forall((Note.enharmonic _).tupled))
     }
   }
 

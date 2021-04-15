@@ -49,8 +49,9 @@ class DiminishedSeventhTest
       case (seventh: DiminishedSeventh, octave: Int) =>
         val triad = DiminishedTriad(seventh.tonic)
         val triadNotes = triad.value.toNotes(octave)
-        ((triadNotes ++ List(triadNotes.head.diminished.seventh)) zip
-          seventh.toNotes(octave)).forall((Note.enharmonic _).tupled)
+        assert(
+          ((triadNotes ++ List(triadNotes.head.diminished.seventh)) zip
+            seventh.toNotes(octave)).forall((Note.enharmonic _).tupled))
     }
   }
 

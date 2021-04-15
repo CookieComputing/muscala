@@ -53,9 +53,10 @@ class DominantSeventhTest
     } yield (seventh, octave)) {
       case (seventh: DominantSeventh, octave: Int) =>
         val triad = MajorTriad(seventh.tonic)
-        val triadNotes = triad.value.toNotes()
-        ((triadNotes ++ List(triadNotes.head.minor.seventh)) zip
-          seventh.toNotes(octave)).forall((Note.enharmonic _).tupled)
+        val triadNotes = triad.value.toNotes(octave)
+        assert(
+          ((triadNotes ++ List(triadNotes.head.minor.seventh)) zip
+            seventh.toNotes(octave)).forall((Note.enharmonic _).tupled))
     }
   }
 
