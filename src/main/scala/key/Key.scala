@@ -9,6 +9,7 @@ import chord.seventh.{
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import note.Note
 import note.Note.{flat, sharp}
+import scale.{MajorScale, NaturalMinorScale}
 
 import scala.annotation.tailrec
 import scala.util.matching.Regex
@@ -111,6 +112,12 @@ case class MajorKey(tonic: String) extends Key {
       MinorSeventh(_),
       HalfDiminishedSeventh(_)
     )).map(tup => tup._2(tup._1)).map(_.get)
+
+  /**
+    * Returns the major scale starting with this key's tonic
+    * @return the major scale
+    */
+  def scale: MajorScale = MajorScale(tonic).get
 }
 
 /**
@@ -165,6 +172,12 @@ case class MinorKey(tonic: String) extends Key {
       MajorSeventh(_),
       DominantSeventh(_)
     )).map(tup => tup._2(tup._1)).map(_.get)
+
+  /**
+    * Returns the natural minor scale starting with this key's tonic
+    * @return the natural minor scale
+    */
+  def naturalMinorScale: NaturalMinorScale = NaturalMinorScale(tonic).get
 }
 
 /**
