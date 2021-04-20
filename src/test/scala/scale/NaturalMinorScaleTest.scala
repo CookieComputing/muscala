@@ -11,9 +11,9 @@ import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import scale.MinorScaleTest.naturalMinorScaleGen
+import scale.NaturalMinorScaleTest.naturalMinorScaleGen
 
-class MinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
+class NaturalMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property(
     "a natural minor scale should have the expected interval " +
       "distances") {
@@ -121,7 +121,7 @@ class MinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   }
 }
 
-object MinorScaleTest extends OptionValues {
+object NaturalMinorScaleTest extends OptionValues {
   val naturalMinorScaleGen: Gen[NaturalMinorScale] = for {
     letter <- NoteTest.noteLetterGen
   } yield NaturalMinorScale(letter.toString).value
