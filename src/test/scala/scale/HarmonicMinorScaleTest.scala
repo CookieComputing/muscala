@@ -81,13 +81,13 @@ class HarmonicMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       case (scale: HarmonicMinorScale, octave: Int) =>
         val notes = scale.toNotes(octave)
         assert(
-          notes.head.rank + 2 == notes(1).rank &&
-            notes(1).rank + 1 == notes(2).rank &&
-            notes(2).rank + 2 == notes(3).rank &&
-            notes(3).rank + 2 == notes(4).rank &&
-            notes(4).rank + 1 == notes(5).rank &&
-            notes(5).rank + 3 == notes(6).rank &&
-            notes(6).rank + 1 == notes.head.perfect.octave.rank
+          Note.distance(notes.head, notes(1)) == 2 &&
+            Note.distance(notes(1), notes(2)) == 1 &&
+            Note.distance(notes(2), notes(3)) == 2 &&
+            Note.distance(notes(3), notes(4)) == 2 &&
+            Note.distance(notes(4), notes(5)) == 1 &&
+            Note.distance(notes(5), notes(6)) == 3 &&
+            Note.distance(notes(6), notes.head.perfect.octave) == 1
         )
     }
   }
@@ -119,7 +119,7 @@ class HarmonicMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   }
 
   property(
-    "the chord tones in each triad in a harmonic minor scales's triads should" +
+    "the chord tones in each triad in a harmonic minor scale's triads should" +
       " be scale degrees found in the minor scale") {
     forAll(harmonicMinorScaleGen) { minorScale: HarmonicMinorScale =>
       assert(minorScale.triads.forall(triad =>
