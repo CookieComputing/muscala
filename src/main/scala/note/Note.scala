@@ -210,6 +210,17 @@ object Note {
     distance(note, otherNote) == 0
 
   /**
+    * Determines if two notes may be enharmonic, but not necessarily in the
+    * same octave. For instance, "B-4" and "B-5" would return true, as would
+    * "C#-0" and "Db-5", but not "C-4", "C#-4".
+    * @param note the first note to check
+    * @param otherNote the second note to compare with
+    * @return whether these two notes are similar
+    */
+  def similarNotes(note: Note, otherNote: Note): Boolean =
+    Math.floorMod(distance(note, otherNote), halfStepsInOctave) == 0
+
+  /**
     * Sharps the name by dropping a flat accidental or adding a sharp accidental
     * @param name the given note name
     * @return a sharpened equivalent of that note name

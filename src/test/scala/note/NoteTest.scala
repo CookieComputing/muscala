@@ -4,6 +4,8 @@ import org.scalacheck.Gen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
+import scala.util.Random
+
 /**
   * Properties for the Note class.
   */
@@ -193,6 +195,60 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
           op(n)
         }
         assertResult(false)(Note.enharmonic(note, alteredNote))
+    }
+  }
+
+  property(
+    "two notes that are potentially of two different octaves but the " +
+      "same note should be similar"
+  ) {
+    forAll(for {
+      note <- noteGen
+      otherOctave <- Gen.chooseNum(-10000, 10000)
+    } yield (note, otherOctave)) {
+      case (note: Note, otherOctave: Int) =>
+        val otherNote = Note(note.name, otherOctave).get
+        assert(Note.similarNotes(note, otherNote))
+    }
+  }
+
+  property(
+    "if two notes are not similar, then they cannot share a rank " +
+      "modulo 12") {
+    forAll(for {
+      note <- noteGen
+      otherNote <- noteGen suchThat { n =>
+        !Note.similarNotes(n, note)
+      }
+    } yield (note, otherNote)) {
+      case (note: Note, otherNote: Note) =>
+        assert(Math.floorMod(Note.distance(note, otherNote),
+                             Note.halfStepsInOctave) != 0)
+    }
+  }
+
+  property("enharmonic notes are similar") {
+    forAll(for {
+      note <- noteGen
+      numOfAccidentals <- Gen.chooseNum(0, 100)
+    } yield (note, numOfAccidentals)) {
+      case (note: Note, numOfAccidentals: Int) =>
+        val enharmonicNote = Random
+          .shuffle(
+            (1 to numOfAccidentals).map(_ => Note.sharp)
+              ++ (1 to
+                numOfAccidentals).map(_ => Note.flat))
+          .foldRight(note) {
+            case (char: Char, acc: Note) =>
+              char match {
+                case Note.flat  => acc.flat
+                case Note.sharp => acc.sharp
+              }
+          }
+
+        assert(
+          Note.enharmonic(note, enharmonicNote) &&
+            Note.similarNotes(note, enharmonicNote))
     }
   }
 }
