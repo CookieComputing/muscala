@@ -1,4 +1,6 @@
 package scale
+import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
+import key.MinorKey
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
@@ -56,6 +58,32 @@ class MinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
+  property(
+    "a natural minor scale's triads should follow the expected chord triads"
+  ) {
+    forAll(naturalMinorScaleGen) { minorScale: NaturalMinorScale =>
+      minorScale.triads match {
+        case List(MinorTriad(_),
+                  DiminishedTriad(_),
+                  MajorTriad(_),
+                  MinorTriad(_),
+                  MinorTriad(_),
+                  MajorTriad(_),
+                  MajorTriad(_)) =>
+          succeed
+        case _ => fail("triad pattern was not matched")
+      }
+    }
+  }
+
+  property(
+    "the chord tones in each triad in a natural minor scales's triads should " +
+      "be scale degrees found in the minor scale") {
+    forAll(naturalMinorScaleGen) { minorScale: NaturalMinorScale =>
+      assert(minorScale.triads.forall(triad =>
+        triad.tones.toSet.subsetOf(minorScale.ascending.toSet)))
+    }
+  }
 }
 
 object MinorScaleTest extends OptionValues {

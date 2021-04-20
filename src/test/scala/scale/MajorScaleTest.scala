@@ -1,4 +1,5 @@
 package scale
+import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
@@ -50,6 +51,33 @@ class MajorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       "it's ascending order") {
     forAll(majorScaleGen) { majorScale: MajorScale =>
       assert(majorScale.ascending.reverse == majorScale.descending)
+    }
+  }
+
+  property(
+    "a major scales's triads should follow the expected chord triads"
+  ) {
+    forAll(majorScaleGen) { majorScale: MajorScale =>
+      majorScale.triads match {
+        case List(MajorTriad(_),
+                  MinorTriad(_),
+                  MinorTriad(_),
+                  MajorTriad(_),
+                  MajorTriad(_),
+                  MinorTriad(_),
+                  DiminishedTriad(_)) =>
+          succeed
+        case _ => fail("triad pattern was not matched")
+      }
+    }
+  }
+
+  property(
+    "the chord tones in each triad in a major scale's triads should be " +
+      "scale degrees found in the major scale") {
+    forAll(majorScaleGen) { scale: MajorScale =>
+      assert(scale.triads.forall(triad =>
+        triad.tones.toSet.subsetOf(scale.ascending.toSet)))
     }
   }
 }

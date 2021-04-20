@@ -1,4 +1,5 @@
 package scale
+import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import interval.diatonic.DiatonicInterval
 import key.MinorKey
 import note.Note
@@ -25,6 +26,23 @@ case class NaturalMinorScale private (tonic: String) extends Scale {
       )
       root <- Note(tonic, octave)
     } yield op(root).get
+
+  /**
+    * Returns the triads that can be formed when starting at each scale
+    * degree. The index of each triad in the list corresponds to the scale
+    * degree used as the tonic of the triad.
+    * @return the list of triads for the scale
+    */
+  def triads: List[Triad] =
+    (ascending zip List(
+      MinorTriad(_),
+      DiminishedTriad(_),
+      MajorTriad(_),
+      MinorTriad(_),
+      MinorTriad(_),
+      MajorTriad(_),
+      MajorTriad(_)
+    )).map(tup => tup._2(tup._1)).map(_.get)
 }
 
 object NaturalMinorScale {

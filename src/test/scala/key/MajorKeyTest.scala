@@ -112,33 +112,6 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   }
 
   property(
-    "a major key's triads should follow the expected chord triads"
-  ) {
-    forAll(majorKeyGen) { key: MajorKey =>
-      key.triads match {
-        case List(MajorTriad(_),
-                  MinorTriad(_),
-                  MinorTriad(_),
-                  MajorTriad(_),
-                  MajorTriad(_),
-                  MinorTriad(_),
-                  DiminishedTriad(_)) =>
-          succeed
-        case _ => fail("triad pattern was not matched")
-      }
-    }
-  }
-
-  property(
-    "the chord tones in each triad in a major key's triads should be " +
-      "scale degrees found in the major key") {
-    forAll(majorKeyGen) { key: MajorKey =>
-      assert(key.triads.forall(triad =>
-        triad.tones.toSet.subsetOf(key.degrees.toSet)))
-    }
-  }
-
-  property(
     "a major key's seventh chords should follow the expected seventh chords"
   ) {
     forAll(majorKeyGen) { key: MajorKey =>
