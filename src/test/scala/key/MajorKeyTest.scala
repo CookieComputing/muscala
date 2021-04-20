@@ -3,12 +3,16 @@ import interval.diatonic.DiatonicInterval
 import key.MajorKeyTest.{circleOfFifthsTable, majorKeyGen}
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
+import org.scalatest.OptionValues
 import org.scalatest.prop.TableFor2
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
+class MajorKeyTest
+    extends AnyPropSpec
+    with ScalaCheckPropertyChecks
+    with OptionValues {
   property("a major key's scales can be generated as notes") {
     forAll(majorKeyGen) { key: MajorKey =>
       assert(key.degrees.map(MajorKey(_)).forall(_.isDefined))
@@ -103,6 +107,28 @@ class MajorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       }
     }
   }
+
+  property(
+    "any major key that exists on the circle of fifths is not a " +
+      "theoretical key") {
+    forAll(circleOfFifthsTable) {
+      case (tonic: String, _) =>
+        val key = MajorKey(tonic).value
+        assert(!key.isTheoreticalKey)
+    }
+  }
+
+  property(
+    "any major key outside of the circle of fifths is a theoretical " +
+      "key") {
+    forAll(for {
+      key <- majorKeyGen suchThat { key =>
+        !circleOfFifthsTable.exists(tup => tup._1 == key.tonic)
+      }
+    } yield key) { majorKey: MajorKey =>
+      assert(majorKey.isTheoreticalKey)
+    }
+  }
 }
 
 // Utility for generating
@@ -115,7 +141,7 @@ object MajorKeyTest {
   } yield
     MajorKey(letter.toString + (accidental.toString * numOfAccidentals)).get
 
-  val circleOfFifthsTable: TableFor2[String, List[String]] =
+  val circleOfFifthsTable: TableFor2[String, List[String]] = {
     Table(
       ("tonic", "degrees"),
       ("Cb", List("Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb")),
@@ -134,4 +160,5 @@ object MajorKeyTest {
       ("F#", List("F#", "G#", "A#", "B", "C#", "D#", "E#")),
       ("C#", List("C#", "D#", "E#", "F#", "G#", "A#", "B#"))
     )
+  }
 }

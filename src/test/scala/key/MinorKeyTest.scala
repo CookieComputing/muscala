@@ -3,12 +3,16 @@ import interval.diatonic.DiatonicInterval
 import key.MinorKeyTest.{circleOfFifthsTable, minorKeyGen}
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
+import org.scalatest.OptionValues
 import org.scalatest.prop.TableFor2
 import org.scalatest.prop.TableDrivenPropertyChecks._
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 
-class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
+class MinorKeyTest
+    extends AnyPropSpec
+    with ScalaCheckPropertyChecks
+    with OptionValues {
   property("a minor key's scales can be generated as notes") {
     forAll(minorKeyGen) { key: MinorKey =>
       assert(key.degrees.map(MinorKey(_)).forall(_.isDefined))
@@ -101,6 +105,28 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
         case MinorKey(tonic) => assertResult(key.degrees(3))(tonic)
         case MajorKey(_)     => fail("Expected minor key")
       }
+    }
+  }
+
+  property(
+    "any minor key that exists on the circle of fifths is not a " +
+      "theoretical key") {
+    forAll(circleOfFifthsTable) {
+      case (tonic: String, _) =>
+        val key = MinorKey(tonic).value
+        assert(!key.isTheoreticalKey)
+    }
+  }
+
+  property(
+    "any minor key outside of the circle of fifths is a theoretical " +
+      "key") {
+    forAll(for {
+      key <- minorKeyGen suchThat { key =>
+        !circleOfFifthsTable.exists(tup => tup._1 == key.tonic)
+      }
+    } yield key) { minorKey: MinorKey =>
+      assert(minorKey.isTheoreticalKey)
     }
   }
 }

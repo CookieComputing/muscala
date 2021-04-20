@@ -34,6 +34,15 @@ sealed trait Key {
     * @return
     */
   def subdominantKey: Key
+
+  /**
+    * Determines if a key is a theoretical key. That is, if any note in the
+    * key signature has a double (or greater!) accidental, it's generally
+    * impractical to read and is not commonly used in pieces.
+    */
+  def isTheoreticalKey: Boolean =
+    degrees.exists(note =>
+      note.count(c => c == Note.flat || c == Note.sharp) > 1)
 }
 
 /**
