@@ -1,11 +1,4 @@
 package key
-import chord.seventh.{
-  DominantSeventh,
-  HalfDiminishedSeventh,
-  MajorSeventh,
-  MinorSeventh
-}
-import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
 import interval.diatonic.DiatonicInterval
 import key.MinorKeyTest.{circleOfFifthsTable, minorKeyGen}
 import note.{Note, NoteTest}
@@ -108,35 +101,6 @@ class MinorKeyTest extends AnyPropSpec with ScalaCheckPropertyChecks {
         case MinorKey(tonic) => assertResult(key.degrees(3))(tonic)
         case MajorKey(_)     => fail("Expected minor key")
       }
-    }
-  }
-
-  property(
-    "a minor key's seventh chords should follow the expected seventh chords"
-  ) {
-    forAll(minorKeyGen) { key: MinorKey =>
-      key.sevenths match {
-        case List(
-            MinorSeventh(_),
-            HalfDiminishedSeventh(_),
-            MajorSeventh(_),
-            MinorSeventh(_),
-            MinorSeventh(_),
-            MajorSeventh(_),
-            DominantSeventh(_)
-            ) =>
-          succeed
-        case _ => fail("seventh chord pattern was not matched")
-      }
-    }
-  }
-
-  property(
-    "the chord tones in each seventh in a minor key's seventh should be " +
-      "scale degrees found in the minor key") {
-    forAll(minorKeyGen) { key: MinorKey =>
-      assert(key.sevenths.forall(seventh =>
-        seventh.tones.toSet.subsetOf(key.degrees.toSet)))
     }
   }
 }

@@ -1,6 +1,11 @@
 package scale
+import chord.seventh.{
+  DominantSeventh,
+  HalfDiminishedSeventh,
+  MajorSeventh,
+  MinorSeventh
+}
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
-import key.MinorKey
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
@@ -82,6 +87,36 @@ class MinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     forAll(naturalMinorScaleGen) { minorScale: NaturalMinorScale =>
       assert(minorScale.triads.forall(triad =>
         triad.tones.toSet.subsetOf(minorScale.ascending.toSet)))
+    }
+  }
+
+  property(
+    "a natural minor key's seventh chords should follow the expected seventh " +
+      "chords"
+  ) {
+    forAll(naturalMinorScaleGen) { scale: NaturalMinorScale =>
+      scale.sevenths match {
+        case List(
+            MinorSeventh(_),
+            HalfDiminishedSeventh(_),
+            MajorSeventh(_),
+            MinorSeventh(_),
+            MinorSeventh(_),
+            MajorSeventh(_),
+            DominantSeventh(_)
+            ) =>
+          succeed
+        case _ => fail("seventh chord pattern was not matched")
+      }
+    }
+  }
+
+  property(
+    "the chord tones in each seventh in a natural minor scale's seventh " +
+      "should be scale degrees found in the minor key") {
+    forAll(naturalMinorScaleGen) { scale: NaturalMinorScale =>
+      assert(scale.sevenths.forall(seventh =>
+        seventh.tones.toSet.subsetOf(scale.ascending.toSet)))
     }
   }
 }

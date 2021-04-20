@@ -1,12 +1,4 @@
 package key
-import chord.seventh.{
-  DominantSeventh,
-  HalfDiminishedSeventh,
-  MajorSeventh,
-  MinorSeventh,
-  Seventh
-}
-import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import note.Note
 import note.Note.{flat, sharp}
 import scale.{MajorScale, NaturalMinorScale}
@@ -42,14 +34,6 @@ sealed trait Key {
     * @return
     */
   def subdominantKey: Key
-
-  /**
-    * Returns the sevenths that can be formed when starting at each scale
-    * degree. The index of each seventh in the list corresponds to the scale
-    * degree used as the tonic of the seventh.
-    * @return the list of sevenths for the key
-    */
-  def sevenths: List[Seventh]
 }
 
 /**
@@ -82,17 +66,6 @@ case class MajorKey(tonic: String) extends Key {
     *  @return the subdominant key of this key
     */
   override def subdominantKey: Key = MajorKey(degrees(3)).get
-
-  override def sevenths: List[Seventh] =
-    (degrees zip List(
-      MajorSeventh(_),
-      MinorSeventh(_),
-      MinorSeventh(_),
-      MajorSeventh(_),
-      DominantSeventh(_),
-      MinorSeventh(_),
-      HalfDiminishedSeventh(_)
-    )).map(tup => tup._2(tup._1)).map(_.get)
 
   /**
     * Returns the major scale starting with this key's tonic
@@ -131,17 +104,6 @@ case class MinorKey(tonic: String) extends Key {
     *  @return the subdominant key of this key
     */
   override def subdominantKey: Key = MinorKey(degrees(3)).get
-
-  override def sevenths: List[Seventh] =
-    (degrees zip List(
-      MinorSeventh(_),
-      HalfDiminishedSeventh(_),
-      MajorSeventh(_),
-      MinorSeventh(_),
-      MinorSeventh(_),
-      MajorSeventh(_),
-      DominantSeventh(_)
-    )).map(tup => tup._2(tup._1)).map(_.get)
 
   /**
     * Returns the natural minor scale starting with this key's tonic

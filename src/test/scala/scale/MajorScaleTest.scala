@@ -1,4 +1,10 @@
 package scale
+import chord.seventh.{
+  DominantSeventh,
+  HalfDiminishedSeventh,
+  MajorSeventh,
+  MinorSeventh
+}
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
@@ -78,6 +84,35 @@ class MajorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     forAll(majorScaleGen) { scale: MajorScale =>
       assert(scale.triads.forall(triad =>
         triad.tones.toSet.subsetOf(scale.ascending.toSet)))
+    }
+  }
+
+  property(
+    "a major scale's seventh chords should follow the expected seventh chords"
+  ) {
+    forAll(majorScaleGen) { scale: MajorScale =>
+      scale.sevenths match {
+        case List(
+            MajorSeventh(_),
+            MinorSeventh(_),
+            MinorSeventh(_),
+            MajorSeventh(_),
+            DominantSeventh(_),
+            MinorSeventh(_),
+            HalfDiminishedSeventh(_)
+            ) =>
+          succeed
+        case _ => fail("seventh chord pattern was not matched")
+      }
+    }
+  }
+
+  property(
+    "the chord tones in each seventh in a major scale's seventh should be " +
+      "scale degrees found in the major scale") {
+    forAll(majorScaleGen) { scale: MajorScale =>
+      assert(scale.sevenths.forall(seventh =>
+        seventh.tones.toSet.subsetOf(scale.ascending.toSet)))
     }
   }
 }

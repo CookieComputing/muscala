@@ -1,4 +1,11 @@
 package scale
+import chord.seventh.{
+  DominantSeventh,
+  HalfDiminishedSeventh,
+  MajorSeventh,
+  MinorSeventh,
+  Seventh
+}
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import interval.diatonic.DiatonicInterval
 import key.MajorKey
@@ -42,6 +49,23 @@ case class MajorScale private (tonic: String) extends Scale {
       MajorTriad(_),
       MinorTriad(_),
       DiminishedTriad(_)
+    )).map(tup => tup._2(tup._1)).map(_.get)
+
+  /**
+    * Returns the sevenths that can be formed when starting at each scale
+    * degree. The index of each seventh in the list corresponds to the scale
+    * degree used as the tonic of the seventh.
+    * @return the list of sevenths for the scale
+    */
+  def sevenths: List[Seventh] =
+    (ascending zip List(
+      MajorSeventh(_),
+      MinorSeventh(_),
+      MinorSeventh(_),
+      MajorSeventh(_),
+      DominantSeventh(_),
+      MinorSeventh(_),
+      HalfDiminishedSeventh(_)
     )).map(tup => tup._2(tup._1)).map(_.get)
 }
 
