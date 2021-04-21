@@ -43,7 +43,7 @@ class NoteTest
 
   property("a note should be copyable from its name and octave") {
     forAll(NoteTest.noteGen) { note: Note =>
-      assert(note == Note(note.name, note.octave).get)
+      assert(note == Note(note.name, note.octave).value)
     }
   }
 
@@ -172,8 +172,8 @@ class NoteTest
 
   property("one octave is twelve half steps") {
     forAll(NoteTest.noteGen) { note: Note =>
-      val aboveOctaveNote = Note(note.name, note.octave + 1).get
-      val belowOctaveNote = Note(note.name, note.octave - 1).get
+      val aboveOctaveNote = Note(note.name, note.octave + 1).value
+      val belowOctaveNote = Note(note.name, note.octave - 1).value
 
       assert(
         (Note.distance(note, aboveOctaveNote) == 12) &&
@@ -246,7 +246,7 @@ class NoteTest
       otherOctave <- Gen.chooseNum(-10000, 10000)
     } yield (note, otherOctave)) {
       case (note: Note, otherOctave: Int) =>
-        val otherNote = Note(note.name, otherOctave).get
+        val otherNote = Note(note.name, otherOctave).value
         assert(Note.similarNotes(note, otherNote))
     }
   }
@@ -293,26 +293,26 @@ class NoteTest
 }
 
 // Utilities for testing notes
-object NoteTest {
+object NoteTest extends OptionValues {
   val noteLetterGen: Gen[Char] =
     Gen.oneOf(List('A', 'B', 'C', 'D', 'E', 'F', 'G'))
 
   val accidentalGen: Gen[Char] = Gen.oneOf(List(Note.flat, Note.sharp))
   val naturalNoteGen: Gen[Note] = for {
     letter <- noteLetterGen
-  } yield Note(letter.toString).get
+  } yield Note(letter.toString).value
 
   val noteGen: Gen[Note] = for {
     letter <- noteLetterGen
     numOfAccidentals <- Gen.chooseNum(0, 1000)
     accidentals <- Gen.listOfN(numOfAccidentals, accidentalGen)
     octave <- Gen.chooseNum(-1000, 1000)
-  } yield Note(letter.toString + accidentals.mkString(""), octave).get
+  } yield Note(letter.toString + accidentals.mkString(""), octave).value
 
   val accidentalNoteGen: Gen[Note] = for {
     note <- noteGen
     accidental <- Gen.oneOf(List(Note.flat, Note.sharp))
-  } yield Note(note.name + accidental, note.octave).get
+  } yield Note(note.name + accidental, note.octave).value
 
   val conventionalNotes: List[String] = List(
     "C",
