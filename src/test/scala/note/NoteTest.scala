@@ -155,6 +155,16 @@ class NoteTest
     }
   }
 
+  property(
+    "clearConflictingAccidentals() should return a name that could then be " +
+      "used to copy the note"
+  ) {
+    forAll(NoteTest.noteGen) { note: Note =>
+      val clearedNote = note.clearConflictingAccidentals
+      assertResult(Note(clearedNote.name, clearedNote.octave).get)(clearedNote)
+    }
+  }
+
   property("nearestNote() preserves a note's rank") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
       assert(note.nearestNote.rank == note.rank)
