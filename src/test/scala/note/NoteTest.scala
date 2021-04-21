@@ -47,6 +47,19 @@ class NoteTest
     }
   }
 
+  property(
+    "adjusting the octave of a note should result in a rank change of " +
+      "12") {
+    forAll(for {
+      note <- NoteTest.noteGen
+      delta <- Gen.chooseNum(-10000, 10000) suchThat (_ != 0)
+    } yield (note, delta)) {
+      case (note: Note, delta: Int) =>
+        assert(Math.abs(Note
+          .distance(note, Note(note.name, note.octave + delta).get)) % 12 == 0)
+    }
+  }
+
   property("a sharp note is one half step above the previous note") {
     forAll(NoteTest.noteGen) { note: Note =>
       {
