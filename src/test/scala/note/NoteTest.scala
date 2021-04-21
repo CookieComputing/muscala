@@ -1,15 +1,26 @@
 package note
-import note.NoteTest.{accidentalGen, noteGen}
+import note.NoteTest.{
+  accidentalGen,
+  conventionalNotes,
+  nearestNoteTable,
+  noteGen
+}
 import org.scalacheck.Gen
+import org.scalatest.OptionValues
+import org.scalatest.prop.TableFor2
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatest.prop.TableDrivenPropertyChecks._
 
 import scala.util.Random
 
 /**
   * Properties for the Note class.
   */
-class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
+class NoteTest
+    extends AnyPropSpec
+    with ScalaCheckPropertyChecks
+    with OptionValues {
   // Adding larger coverage for Note, since Note is a fundamental concept to
   // the library
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
@@ -137,8 +148,21 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
     }
   }
 
-  // TODO: Maybe add a property that verifies that nearest note will change
-  //  a note, idk
+  property(
+    "nearestNote() should convert a note's name to a conventional " +
+      "note") {
+    forAll(NoteTest.noteGen) { note: Note =>
+      assert(conventionalNotes.contains(note.nearestNote.name))
+    }
+  }
+
+  property("nearestNote() should pass the provided table tests") {
+    forAll(nearestNoteTable) {
+      case (actual: String, expected: String) =>
+        val note = Note(actual).value
+        assertResult(expected)(note.nearestNote.name)
+    }
+  }
 
   property("nearestNote() causes the note to have one accidental at most") {
     forAll(NoteTest.accidentalNoteGen) { note: Note =>
@@ -289,4 +313,41 @@ object NoteTest {
     note <- noteGen
     accidental <- Gen.oneOf(List(Note.flat, Note.sharp))
   } yield Note(note.name + accidental, note.octave).get
+
+  val conventionalNotes: List[String] = List(
+    "C",
+    "C#",
+    "Db",
+    "D",
+    "D#",
+    "Eb",
+    "E",
+    "F",
+    "F#",
+    "Gb",
+    "G",
+    "G#",
+    "Ab",
+    "A",
+    "A#",
+    "Bb",
+    "B"
+  )
+
+  val nearestNoteTable: TableFor2[String, String] = Table(
+    ("accidental", "expected"),
+    ("C##", "D"),
+    ("C#####", "F"),
+    ("Dbbb", "B"),
+    ("A####", "C#"),
+    ("G#####bb", "A#"),
+    ("G#b#b#b#b", "G"),
+    ("F##", "G"),
+    ("E#", "F"),
+    ("Fb", "E"),
+    ("B#", "C"),
+    ("Cb", "B"),
+    ("A#", "A#"),
+    ("Gb", "Gb")
+  )
 }
