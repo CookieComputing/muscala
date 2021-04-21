@@ -8,8 +8,8 @@ import note.Note
   * minor scale.
   */
 case class MinorPentatonicScale private (tonic: String) extends Scale {
-  private val minorScale = NaturalMinorScale(tonic).get
-  implicit private val minorKey: MinorKey = MinorKey(tonic).get
+  private lazy val minorScale = NaturalMinorScale(tonic).get
+  implicit lazy private val minorKey: MinorKey = MinorKey(tonic).get
 
   override def ascending: List[String] =
     minorScale.ascending.take(1) ++
