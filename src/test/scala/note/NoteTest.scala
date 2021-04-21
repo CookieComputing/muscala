@@ -1,5 +1,5 @@
 package note
-import note.NoteTest.noteGen
+import note.NoteTest.{accidentalGen, noteGen}
 import org.scalacheck.Gen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -14,6 +14,21 @@ class NoteTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   // the library
   implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
     PropertyCheckConfiguration(minSuccessful = 100)
+
+  property("a valid note should only have letters from 'A' to 'G'") {
+    forAll(for {
+      char <- Gen.alphaChar
+      numOfAccidentals <- Gen.chooseNum(1, 1000)
+      accidentals <- Gen.listOfN(numOfAccidentals, accidentalGen)
+    } yield Note(char.toString ++ accidentals.toString)) { note: Option[Note] =>
+      note match {
+        case Some(Note(name, _)) =>
+          assert(('A' to 'G').contains(name.head))
+        case None =>
+          succeed
+      }
+    }
+  }
 
   property("a note should be copyable from its name and octave") {
     forAll(NoteTest.noteGen) { note: Note =>
