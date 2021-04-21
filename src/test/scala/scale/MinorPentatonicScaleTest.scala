@@ -58,6 +58,15 @@ class MinorPentatonicScaleTest
         )
     }
   }
+
+  property(
+    "the minor pentatonic and its relative major pentatonic should " +
+      "share the same tones") {
+    forAll(minorPentatonicScaleGen) { scale: MinorPentatonicScale =>
+      assertResult(scale.ascending.toSet)(
+        scale.relativeMajorPentatonic.ascending.toSet)
+    }
+  }
 }
 
 object MinorPentatonicScaleTest extends OptionValues {

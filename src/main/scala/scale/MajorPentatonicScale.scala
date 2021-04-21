@@ -24,6 +24,14 @@ case class MajorPentatonicScale(tonic: String) extends Scale {
          DiatonicInterval.fifth(_),
          DiatonicInterval.sixth(_)).map(op => op(rootNote).get)
   }
+
+  /**
+    * Returns the relative minor pentatonic of this scale
+    * @return the relative minor pentatonic
+    */
+  def relativeMinorPentatonic: MinorPentatonicScale =
+    // recall that the major pentatonic is tones 1-2-3-5-6
+    MinorPentatonicScale(ascending.last).get
 }
 
 object MajorPentatonicScale {
