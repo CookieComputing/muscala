@@ -42,4 +42,14 @@ class PerfectIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
           Note.distance(note, note.perfect.octave) == Note.halfStepsInOctave)
     }
   }
+
+  property(
+    "creating a perfect octave should be equivalent to creating " +
+      "another note with the same name but an increased octave by one") {
+    forAll(noteGen) { note: Note =>
+      assert(
+        Note.enharmonic(note.perfect.octave,
+                        Note(note.name, note.octave + 1).get))
+    }
+  }
 }
