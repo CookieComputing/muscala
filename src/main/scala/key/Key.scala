@@ -1,10 +1,9 @@
 package key
 import note.Note
-import note.Note.{flat, sharp}
 import scale.{MajorScale, NaturalMinorScale}
+import util.ConstructorUtils
 
 import scala.annotation.tailrec
-import scala.util.matching.Regex
 
 /**
   * Represents a key in western harmony.
@@ -132,9 +131,7 @@ object MajorKey extends KeyBuilder {
     * @return a major key if the tonic is valid, None otherwise
     */
   def apply(tonic: String): Option[MajorKey] =
-    if (Note.tonicRegex.matches(tonic))
-      Some(new MajorKey(tonic))
-    else None
+    ConstructorUtils.validTonicConstructor(tonic, s => new MajorKey(s))
 
   // Key generation starts from the key of "C"
   private val startingKey = List("C", "D", "E", "F", "G", "A", "B")
@@ -163,9 +160,7 @@ object MinorKey extends KeyBuilder {
     * @return a minor key if the tonic is valid, None otherwise
     */
   def apply(tonic: String): Option[MinorKey] =
-    if (Note.tonicRegex.matches(tonic))
-      Some(new MinorKey(tonic))
-    else None
+    ConstructorUtils.validTonicConstructor(tonic, s => new MinorKey(s))
 
   // Key generation starts from the key of "C"
   private val startingKey = List("A", "B", "C", "D", "E", "F", "G")

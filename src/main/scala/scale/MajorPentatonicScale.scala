@@ -2,6 +2,7 @@ package scale
 import interval.diatonic.DiatonicInterval
 import key.MajorKey
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents the major pentatonic scale, which removes the 4th and 7th tones
@@ -36,6 +37,6 @@ case class MajorPentatonicScale(tonic: String) extends Scale {
 
 object MajorPentatonicScale {
   def apply(tonic: String): Option[MajorPentatonicScale] =
-    if (Note.tonicRegex.matches(tonic)) Some(new MajorPentatonicScale(tonic))
-    else None
+    ConstructorUtils.validTonicConstructor(tonic,
+                                           s => new MajorPentatonicScale(s))
 }

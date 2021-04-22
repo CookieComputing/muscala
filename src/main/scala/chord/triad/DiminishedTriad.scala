@@ -2,6 +2,7 @@ package chord.triad
 import interval.diatonic.DiatonicInterval
 import key.MinorKey
 import note.Note
+import util.ConstructorUtils
 
 case class DiminishedTriad private (tonic: String) extends Triad {
   override protected val key: MinorKey = MinorKey(tonic).get
@@ -27,7 +28,5 @@ case class DiminishedTriad private (tonic: String) extends Triad {
 
 object DiminishedTriad {
   def apply(tonic: String): Option[DiminishedTriad] =
-    if (Note.tonicRegex.matches(tonic)) Some(new DiminishedTriad(tonic))
-    else
-      None
+    ConstructorUtils.validTonicConstructor(tonic, s => new DiminishedTriad(s))
 }

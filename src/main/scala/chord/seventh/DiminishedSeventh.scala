@@ -3,6 +3,7 @@ import chord.triad.DiminishedTriad
 import interval.diatonic.DiatonicInterval
 import key.{Key, MinorKey}
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents a diminished seventh chord.
@@ -37,7 +38,5 @@ case class DiminishedSeventh private (tonic: String) extends Seventh {
 
 object DiminishedSeventh {
   def apply(tonic: String): Option[DiminishedSeventh] =
-    if (Note.tonicRegex.matches(tonic)) Some(new DiminishedSeventh(tonic))
-    else
-      None
+    ConstructorUtils.validTonicConstructor(tonic, s => new DiminishedSeventh(s))
 }

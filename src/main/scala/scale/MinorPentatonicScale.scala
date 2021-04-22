@@ -2,6 +2,7 @@ package scale
 import interval.diatonic.DiatonicInterval
 import key.MinorKey
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents a minor pentatonic scale, which removes tones 2 and 6 from the
@@ -38,7 +39,6 @@ case class MinorPentatonicScale private (tonic: String) extends Scale {
 
 object MinorPentatonicScale {
   def apply(tonic: String): Option[MinorPentatonicScale] =
-    if (Note.tonicRegex.matches(tonic))
-      Some(new MinorPentatonicScale(tonic))
-    else None
+    ConstructorUtils.validTonicConstructor(tonic,
+                                           s => new MinorPentatonicScale(s))
 }

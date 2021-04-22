@@ -10,6 +10,7 @@ import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import interval.diatonic.DiatonicInterval
 import key.MajorKey
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents the major scale, which bases the intervals it uses from the
@@ -71,5 +72,5 @@ case class MajorScale private (tonic: String) extends Scale {
 
 object MajorScale {
   def apply(tonic: String): Option[MajorScale] =
-    if (Note.tonicRegex.matches(tonic)) Some(new MajorScale(tonic)) else None
+    ConstructorUtils.validTonicConstructor(tonic, s => new MajorScale(s))
 }

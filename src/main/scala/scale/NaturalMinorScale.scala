@@ -10,6 +10,7 @@ import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad, Triad}
 import interval.diatonic.DiatonicInterval
 import key.MinorKey
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents the natural minor scale, which bases its scale degrees from
@@ -71,7 +72,5 @@ case class NaturalMinorScale private (tonic: String) extends Scale {
 
 object NaturalMinorScale {
   def apply(tonic: String): Option[NaturalMinorScale] =
-    if (Note.tonicRegex.matches(tonic)) Some(new NaturalMinorScale(tonic))
-    else
-      None
+    ConstructorUtils.validTonicConstructor(tonic, s => new NaturalMinorScale(s))
 }

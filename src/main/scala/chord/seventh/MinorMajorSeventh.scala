@@ -3,6 +3,7 @@ import chord.triad.MinorTriad
 import interval.diatonic.DiatonicInterval
 import key.{Key, MajorKey, MinorKey}
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents a minor major seventh chord.
@@ -29,7 +30,5 @@ case class MinorMajorSeventh private (tonic: String) extends Seventh {
 
 object MinorMajorSeventh {
   def apply(tonic: String): Option[MinorMajorSeventh] =
-    if (Note.tonicRegex.matches(tonic)) Some(new MinorMajorSeventh(tonic))
-    else
-      None
+    ConstructorUtils.validTonicConstructor(tonic, s => new MinorMajorSeventh(s))
 }

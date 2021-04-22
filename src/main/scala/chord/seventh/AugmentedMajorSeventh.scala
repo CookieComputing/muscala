@@ -3,6 +3,7 @@ import chord.triad.AugmentedTriad
 import interval.diatonic.DiatonicInterval
 import key.{Key, MajorKey}
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents an augmented major seventh chord.
@@ -32,6 +33,6 @@ case class AugmentedMajorSeventh private (tonic: String) extends Seventh {
 
 object AugmentedMajorSeventh {
   def apply(tonic: String): Option[AugmentedMajorSeventh] =
-    if (Note.tonicRegex.matches(tonic)) Some(new AugmentedMajorSeventh(tonic))
-    else None
+    ConstructorUtils.validTonicConstructor(tonic,
+                                           s => new AugmentedMajorSeventh(s))
 }

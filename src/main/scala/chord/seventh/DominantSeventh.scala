@@ -3,6 +3,7 @@ import chord.triad.MajorTriad
 import interval.diatonic.DiatonicInterval
 import key.{Key, MajorKey}
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents a dominant seventh, which is a major triad with a minor 7th.
@@ -31,7 +32,5 @@ case class DominantSeventh private (tonic: String) extends Seventh {
 
 object DominantSeventh {
   def apply(tonic: String): Option[DominantSeventh] =
-    if (Note.tonicRegex.matches(tonic)) Some(new DominantSeventh(tonic))
-    else
-      None
+    ConstructorUtils.validTonicConstructor(tonic, s => new DominantSeventh(s))
 }

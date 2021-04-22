@@ -9,6 +9,7 @@ import chord.seventh.{
 import chord.triad.{AugmentedTriad, DiminishedTriad, MajorTriad, Triad}
 import key.MinorKey
 import note.Note
+import util.ConstructorUtils
 
 /**
   * Represents a harmonic minor scale. A harmonic minor scale is a
@@ -58,7 +59,6 @@ case class HarmonicMinorScale private (tonic: String) extends Scale {
 
 object HarmonicMinorScale {
   def apply(tonic: String): Option[HarmonicMinorScale] =
-    if (Note.tonicRegex.matches(tonic)) Some(new HarmonicMinorScale(tonic))
-    else
-      None
+    ConstructorUtils.validTonicConstructor(tonic,
+                                           s => new HarmonicMinorScale(s))
 }
