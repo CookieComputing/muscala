@@ -13,7 +13,7 @@ object NoteUtil extends OptionValues {
   val clearedNoteStringGen: Gen[String] = for {
     letter <- NoteTest.noteLetterGen
     // Limited to avoid intensive CPU time
-    numOfAccidentals <- Gen.chooseNum(0, 1000)
+    numOfAccidentals <- Gen.chooseNum(0, 100)
     accidental <- NoteTest.accidentalGen
   } yield letter.toString + accidental.toString * numOfAccidentals
 
