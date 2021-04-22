@@ -62,6 +62,23 @@ class MinorKeyTest
     }
   }
 
+  property(
+    "a minor key's subdominant key should have the same notes except for " +
+      "one note") {
+    forAll(minorKeyGen) { key: MinorKey =>
+      assertResult(1)(
+        (key.degrees.toSet &~ key.subdominantKey.degrees.toSet).size)
+    }
+  }
+
+  property(
+    "a minor key's dominant key should have the same notes except for " +
+      "one note") {
+    forAll(minorKeyGen) { key: MinorKey =>
+      assertResult(1)((key.degrees.toSet &~ key.dominantKey.degrees.toSet).size)
+    }
+  }
+
   property("a minor key should follow the W-H-W-W-H-W-W pattern") {
     forAll(minorKeyGen) { key: MinorKey =>
       (key.degrees zip List(2, 1, 2, 2, 1, 2, 2)).forall(tup => {

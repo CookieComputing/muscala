@@ -62,6 +62,23 @@ class MajorKeyTest
     }
   }
 
+  property(
+    "a major key's subdominant key should have the same notes except for " +
+      "one note") {
+    forAll(majorKeyGen) { key: MajorKey =>
+      assertResult(1)(
+        (key.degrees.toSet &~ key.subdominantKey.degrees.toSet).size)
+    }
+  }
+
+  property(
+    "a major key's dominant key should have the same notes except for " +
+      "one note") {
+    forAll(majorKeyGen) { key: MajorKey =>
+      assertResult(1)((key.degrees.toSet &~ key.dominantKey.degrees.toSet).size)
+    }
+  }
+
   property("a major key should follow the W-W-H-W-W-W-H pattern") {
     forAll(majorKeyGen) { key: MajorKey =>
       (key.degrees zip List(2, 2, 1, 2, 2, 2, 1)).forall(tup => {
