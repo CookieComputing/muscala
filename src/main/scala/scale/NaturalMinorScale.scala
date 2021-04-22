@@ -71,5 +71,7 @@ case class NaturalMinorScale private (tonic: String) extends Scale {
 
 object NaturalMinorScale {
   def apply(tonic: String): Option[NaturalMinorScale] =
-    if (MinorKey(tonic).isDefined) Some(new NaturalMinorScale(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new NaturalMinorScale(tonic))
+    else
+      None
 }

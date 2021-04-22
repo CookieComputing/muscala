@@ -32,6 +32,6 @@ case class AugmentedMajorSeventh private (tonic: String) extends Seventh {
 
 object AugmentedMajorSeventh {
   def apply(tonic: String): Option[AugmentedMajorSeventh] =
-    if (MajorKey(tonic).isDefined) Some(new AugmentedMajorSeventh(tonic))
+    if (Note.tonicRegex.matches(tonic)) Some(new AugmentedMajorSeventh(tonic))
     else None
 }

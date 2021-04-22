@@ -36,6 +36,6 @@ case class MajorPentatonicScale(tonic: String) extends Scale {
 
 object MajorPentatonicScale {
   def apply(tonic: String): Option[MajorPentatonicScale] =
-    if (MajorScale(tonic).isDefined) Some(new MajorPentatonicScale(tonic))
+    if (Note.tonicRegex.matches(tonic)) Some(new MajorPentatonicScale(tonic))
     else None
 }

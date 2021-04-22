@@ -1,6 +1,7 @@
 package chord.seventh
 import chord.triad.MajorTriad
 import key.{Key, MajorKey}
+import note.Note
 
 /**
   * Represents a major seventh chord.
@@ -19,5 +20,5 @@ case class MajorSeventh private (tonic: String) extends Seventh {
 
 object MajorSeventh {
   def apply(tonic: String): Option[MajorSeventh] =
-    if (MajorKey(tonic).isDefined) Some(new MajorSeventh(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new MajorSeventh(tonic)) else None
 }

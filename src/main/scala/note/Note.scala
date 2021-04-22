@@ -160,7 +160,11 @@ object Note {
   val sharp: Char = '#'
   val flat: Char = 'b'
 
+  // This regex allows for an arbitrary combination of sharps and flats
   val noteRegex: Regex = s"[A-G]($sharp|$flat)*".r
+
+  // This regex only allows sharps or flats (if any)
+  val tonicRegex: Regex = s"[A-G]($sharp*|$flat*)".r
 
   /**
     * Creates a note in the 4th octave. If the note name is not valid, returns

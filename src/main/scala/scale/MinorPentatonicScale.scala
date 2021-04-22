@@ -38,7 +38,7 @@ case class MinorPentatonicScale private (tonic: String) extends Scale {
 
 object MinorPentatonicScale {
   def apply(tonic: String): Option[MinorPentatonicScale] =
-    if (NaturalMinorScale(tonic).isDefined)
+    if (Note.tonicRegex.matches(tonic))
       Some(new MinorPentatonicScale(tonic))
     else None
 }

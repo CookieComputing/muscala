@@ -29,5 +29,7 @@ case class MinorMajorSeventh private (tonic: String) extends Seventh {
 
 object MinorMajorSeventh {
   def apply(tonic: String): Option[MinorMajorSeventh] =
-    if (MinorKey(tonic).isDefined) Some(new MinorMajorSeventh(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new MinorMajorSeventh(tonic))
+    else
+      None
 }

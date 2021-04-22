@@ -27,5 +27,7 @@ case class DiminishedTriad private (tonic: String) extends Triad {
 
 object DiminishedTriad {
   def apply(tonic: String): Option[DiminishedTriad] =
-    if (MinorKey(tonic).isDefined) Some(new DiminishedTriad(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new DiminishedTriad(tonic))
+    else
+      None
 }

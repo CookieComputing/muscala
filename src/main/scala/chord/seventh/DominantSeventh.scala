@@ -31,5 +31,7 @@ case class DominantSeventh private (tonic: String) extends Seventh {
 
 object DominantSeventh {
   def apply(tonic: String): Option[DominantSeventh] =
-    if (MajorKey(tonic).isDefined) Some(new DominantSeventh(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new DominantSeventh(tonic))
+    else
+      None
 }

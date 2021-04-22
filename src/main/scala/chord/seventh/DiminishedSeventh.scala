@@ -37,5 +37,7 @@ case class DiminishedSeventh private (tonic: String) extends Seventh {
 
 object DiminishedSeventh {
   def apply(tonic: String): Option[DiminishedSeventh] =
-    if (MinorKey(tonic).isDefined) Some(new DiminishedSeventh(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new DiminishedSeventh(tonic))
+    else
+      None
 }

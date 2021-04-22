@@ -55,5 +55,7 @@ case class MelodicMinorScale private (tonic: String) extends Scale {
 
 object MelodicMinorScale {
   def apply(tonic: String): Option[MelodicMinorScale] =
-    if (MinorKey(tonic).isDefined) Some(new MelodicMinorScale(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new MelodicMinorScale(tonic))
+    else
+      None
 }

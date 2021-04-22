@@ -71,5 +71,5 @@ case class MajorScale private (tonic: String) extends Scale {
 
 object MajorScale {
   def apply(tonic: String): Option[MajorScale] =
-    if (MajorKey(tonic).isDefined) Some(new MajorScale(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new MajorScale(tonic)) else None
 }

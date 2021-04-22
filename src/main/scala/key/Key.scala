@@ -132,7 +132,7 @@ object MajorKey extends KeyBuilder {
     * @return a major key if the tonic is valid, None otherwise
     */
   def apply(tonic: String): Option[MajorKey] =
-    if (tonicRegex.matches(tonic))
+    if (Note.tonicRegex.matches(tonic))
       Some(new MajorKey(tonic))
     else None
 
@@ -163,7 +163,7 @@ object MinorKey extends KeyBuilder {
     * @return a minor key if the tonic is valid, None otherwise
     */
   def apply(tonic: String): Option[MinorKey] =
-    if (tonicRegex.matches(tonic))
+    if (Note.tonicRegex.matches(tonic))
       Some(new MinorKey(tonic))
     else None
 
@@ -187,8 +187,6 @@ object MinorKey extends KeyBuilder {
   * Abstract logic for major and minor key scale construction
   */
 protected trait KeyBuilder {
-  val tonicRegex: Regex = s"[A-G]($sharp*|$flat*)".r
-
   // used to determine which direction of the circle of fifths to head towards
   private val keyOrdering = Map(
     'F' -> 1,

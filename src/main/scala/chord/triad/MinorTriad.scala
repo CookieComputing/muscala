@@ -1,5 +1,6 @@
 package chord.triad
 import key.MinorKey
+import note.Note
 
 case class MinorTriad private (tonic: String) extends Triad {
   override val key: MinorKey = MinorKey(tonic).get
@@ -7,5 +8,5 @@ case class MinorTriad private (tonic: String) extends Triad {
 
 object MinorTriad {
   def apply(tonic: String): Option[MinorTriad] =
-    if (MinorKey(tonic).isDefined) Some(new MinorTriad(tonic)) else None
+    if (Note.tonicRegex.matches(tonic)) Some(new MinorTriad(tonic)) else None
 }
