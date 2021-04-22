@@ -14,6 +14,10 @@ class MajorKeyTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
+  // Adding larger coverage for major keys, since major keys is a dependency
+  // for chords and scales
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = 100)
   property("a major key's scales can be generated as notes") {
     forAll(majorKeyGen) { key: MajorKey =>
       assert(key.degrees.map(MajorKey(_)).forall(_.isDefined))

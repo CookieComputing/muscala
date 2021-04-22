@@ -14,6 +14,10 @@ class MinorKeyTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
+  // Adding larger coverage for minor keys, since minor keys is a dependency
+  // for chords and scales
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = 100)
   property("a minor key's scales can be generated as notes") {
     forAll(minorKeyGen) { key: MinorKey =>
       assert(key.degrees.map(MinorKey(_)).forall(_.isDefined))
