@@ -1,10 +1,11 @@
 package chord.triad
 import chord.triad.MinorTriadTest.minorTriadGen
-import key.{MinorKey, MinorKeyTest}
+import key.MinorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 class MinorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("a minor triad should have three tones") {
@@ -60,6 +61,6 @@ class MinorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 // utilities for testing minor triads
 object MinorTriadTest {
   val minorTriadGen: Gen[MinorTriad] = for {
-    key <- MinorKeyTest.minorKeyGen
-  } yield MinorTriad(key.tonic).get
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MinorTriad(tonic).get
 }

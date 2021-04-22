@@ -1,10 +1,11 @@
 package scale
-import note.{Note, NoteTest}
+import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.MinorPentatonicScaleTest.minorPentatonicScaleGen
+import util.NoteUtil
 
 class MinorPentatonicScaleTest
     extends AnyPropSpec
@@ -71,10 +72,6 @@ class MinorPentatonicScaleTest
 
 object MinorPentatonicScaleTest extends OptionValues {
   val minorPentatonicScaleGen: Gen[MinorPentatonicScale] = for {
-    letter <- NoteTest.noteLetterGen
-    numOfAccidentals <- Gen.chooseNum(0, 1000)
-    accidental <- NoteTest.accidentalGen
-  } yield
-    MinorPentatonicScale(
-      letter.toString + accidental.toString * numOfAccidentals).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MinorPentatonicScale(tonic).value
 }

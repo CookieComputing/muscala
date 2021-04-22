@@ -15,6 +15,7 @@ import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.HarmonicMinorScaleTest.harmonicMinorScaleGen
+import util.NoteUtil
 
 class HarmonicMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property(
@@ -160,6 +161,6 @@ class HarmonicMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
 object HarmonicMinorScaleTest extends OptionValues {
   val harmonicMinorScaleGen: Gen[HarmonicMinorScale] = for {
-    letter <- NoteTest.noteLetterGen
-  } yield HarmonicMinorScale(letter.toString).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield HarmonicMinorScale(tonic).value
 }

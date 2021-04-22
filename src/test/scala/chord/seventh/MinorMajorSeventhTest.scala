@@ -1,12 +1,13 @@
 package chord.seventh
 import chord.seventh.MinorMajorSeventhTest.minorMajorSeventhChordGen
 import chord.triad.MinorTriad
-import key.{MajorKey, MinorKeyTest}
+import key.MajorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 /**
   * Tests for the minor major seventh chord
@@ -73,6 +74,6 @@ class MinorMajorSeventhTest
 
 object MinorMajorSeventhTest extends OptionValues {
   val minorMajorSeventhChordGen: Gen[MinorMajorSeventh] = for {
-    key <- MinorKeyTest.minorKeyGen
-  } yield MinorMajorSeventh(key.tonic).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MinorMajorSeventh(tonic).value
 }

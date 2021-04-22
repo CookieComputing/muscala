@@ -1,10 +1,11 @@
 package chord.triad
 import chord.triad.DiminishedTriadTest.diminishedTriadGen
-import key.{MinorKey, MinorKeyTest}
+import key.MinorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 class DiminishedTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("a diminished triad should have three tones") {
@@ -72,6 +73,6 @@ class DiminishedTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 // utilities for testing diminished triads
 object DiminishedTriadTest {
   val diminishedTriadGen: Gen[DiminishedTriad] = for {
-    key <- MinorKeyTest.minorKeyGen
-  } yield DiminishedTriad(key.tonic).get
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield DiminishedTriad(tonic).get
 }

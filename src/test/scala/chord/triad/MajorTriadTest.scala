@@ -1,10 +1,11 @@
 package chord.triad
 import chord.triad.MajorTriadTest.majorTriadGen
-import key.{MajorKey, MajorKeyTest}
+import key.MajorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 // tests for major triads
 class MajorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
@@ -61,6 +62,6 @@ class MajorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 // utilities for testing major triads
 object MajorTriadTest {
   val majorTriadGen: Gen[MajorTriad] = for {
-    key <- MajorKeyTest.majorKeyGen
-  } yield MajorTriad(key.tonic).get
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MajorTriad(tonic).get
 }

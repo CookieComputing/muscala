@@ -1,10 +1,11 @@
 package scale
-import note.{Note, NoteTest}
+import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.MajorPentatonicScaleTest.majorPentatonicScaleGen
+import util.NoteUtil
 
 class MajorPentatonicScaleTest
     extends AnyPropSpec
@@ -73,10 +74,6 @@ class MajorPentatonicScaleTest
 
 object MajorPentatonicScaleTest extends OptionValues {
   val majorPentatonicScaleGen: Gen[MajorPentatonicScale] = for {
-    letter <- NoteTest.noteLetterGen
-    numOfAccidentals <- Gen.chooseNum(0, 1000)
-    accidental <- NoteTest.accidentalGen
-  } yield
-    MajorPentatonicScale(
-      letter.toString + accidental.toString * numOfAccidentals).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MajorPentatonicScale(tonic).value
 }

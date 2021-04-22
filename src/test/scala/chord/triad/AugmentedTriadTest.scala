@@ -1,10 +1,11 @@
 package chord.triad
 import chord.triad.AugmentedTriadTest.augmentedTriadGen
-import key.{MajorKey, MajorKeyTest}
+import key.MajorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 class AugmentedTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("an augmented triad should have three tones") {
@@ -72,6 +73,6 @@ class AugmentedTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 // utilities for testing augmented triads
 object AugmentedTriadTest {
   val augmentedTriadGen: Gen[AugmentedTriad] = for {
-    key <- MajorKeyTest.majorKeyGen
-  } yield AugmentedTriad(key.tonic).get
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield AugmentedTriad(tonic).get
 }

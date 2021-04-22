@@ -1,12 +1,13 @@
 package chord.seventh
 import chord.seventh.DominantSeventhTest.dominantSeventhChordGen
 import chord.triad.MajorTriad
-import key.{MajorKey, MajorKeyTest}
+import key.MajorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 /**
   * Tests for dominant seventh chords
@@ -75,6 +76,6 @@ class DominantSeventhTest
 
 object DominantSeventhTest extends OptionValues {
   val dominantSeventhChordGen: Gen[DominantSeventh] = for {
-    key <- MajorKeyTest.majorKeyGen
-  } yield DominantSeventh(key.tonic).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield DominantSeventh(tonic).value
 }

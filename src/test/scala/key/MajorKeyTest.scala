@@ -1,13 +1,14 @@
 package key
 import interval.diatonic.DiatonicInterval
 import key.MajorKeyTest.{circleOfFifthsTable, majorKeyGen}
-import note.{Note, NoteTest}
+import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.prop.TableFor2
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import org.scalatest.prop.TableDrivenPropertyChecks._
+import util.NoteUtil
 
 class MajorKeyTest
     extends AnyPropSpec
@@ -134,12 +135,8 @@ class MajorKeyTest
 // Utility for generating
 object MajorKeyTest {
   val majorKeyGen: Gen[MajorKey] = for {
-    letter <- NoteTest.noteLetterGen
-    accidental <- NoteTest.accidentalGen
-    // limited to save CPU time
-    numOfAccidentals <- Gen.choose(0, 100)
-  } yield
-    MajorKey(letter.toString + (accidental.toString * numOfAccidentals)).get
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MajorKey(tonic).get
 
   val circleOfFifthsTable: TableFor2[String, List[String]] = {
     Table(

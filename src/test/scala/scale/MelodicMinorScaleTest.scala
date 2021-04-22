@@ -13,6 +13,7 @@ import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.MelodicMinorScaleTest.melodicMinorScaleGen
+import util.NoteUtil
 
 class MelodicMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property(
@@ -158,6 +159,6 @@ class MelodicMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
 object MelodicMinorScaleTest extends OptionValues {
   val melodicMinorScaleGen: Gen[MelodicMinorScale] = for {
-    letter <- NoteTest.noteLetterGen
-  } yield MelodicMinorScale(letter.toString).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MelodicMinorScale(tonic).value
 }

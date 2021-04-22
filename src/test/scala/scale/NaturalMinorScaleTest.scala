@@ -6,12 +6,13 @@ import chord.seventh.{
   MinorSeventh
 }
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
-import note.{Note, NoteTest}
+import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.NaturalMinorScaleTest.naturalMinorScaleGen
+import util.NoteUtil
 
 class NaturalMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property(
@@ -123,6 +124,6 @@ class NaturalMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
 object NaturalMinorScaleTest extends OptionValues {
   val naturalMinorScaleGen: Gen[NaturalMinorScale] = for {
-    letter <- NoteTest.noteLetterGen
-  } yield NaturalMinorScale(letter.toString).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield NaturalMinorScale(tonic).value
 }

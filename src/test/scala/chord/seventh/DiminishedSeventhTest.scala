@@ -1,12 +1,13 @@
 package chord.seventh
 import chord.seventh.DiminishedSeventhTest.diminishedSeventhChordGen
 import chord.triad.DiminishedTriad
-import key.{MinorKey, MinorKeyTest}
+import key.MinorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 class DiminishedSeventhTest
     extends AnyPropSpec
@@ -70,6 +71,6 @@ class DiminishedSeventhTest
 
 object DiminishedSeventhTest extends OptionValues {
   val diminishedSeventhChordGen: Gen[DiminishedSeventh] = for {
-    key <- MinorKeyTest.minorKeyGen
-  } yield DiminishedSeventh(key.tonic).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield DiminishedSeventh(tonic).value
 }

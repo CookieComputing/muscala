@@ -1,12 +1,13 @@
 package chord.seventh
 import chord.seventh.AugmentedMajorSeventhTest.augmentedMajorSeventhChordGen
 import chord.triad.AugmentedTriad
-import key.{MajorKey, MajorKeyTest}
+import key.MajorKey
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import util.NoteUtil
 
 class AugmentedMajorSeventhTest
     extends AnyPropSpec
@@ -70,6 +71,6 @@ class AugmentedMajorSeventhTest
 
 object AugmentedMajorSeventhTest extends OptionValues {
   val augmentedMajorSeventhChordGen: Gen[AugmentedMajorSeventh] = for {
-    key <- MajorKeyTest.majorKeyGen
-  } yield AugmentedMajorSeventh(key.tonic).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield AugmentedMajorSeventh(tonic).value
 }

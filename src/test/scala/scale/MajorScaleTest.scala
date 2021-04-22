@@ -6,12 +6,13 @@ import chord.seventh.{
   MinorSeventh
 }
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
-import note.{Note, NoteTest}
+import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.MajorScaleTest.majorScaleGen
+import util.NoteUtil
 
 class MajorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   property("a major scale should have the expected interval distances") {
@@ -119,6 +120,6 @@ class MajorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
 
 object MajorScaleTest extends OptionValues {
   val majorScaleGen: Gen[MajorScale] = for {
-    letter <- NoteTest.noteLetterGen
-  } yield MajorScale(letter.toString).value
+    tonic <- NoteUtil.clearedNoteStringGen
+  } yield MajorScale(tonic).value
 }
