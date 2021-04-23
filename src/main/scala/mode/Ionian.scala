@@ -1,4 +1,5 @@
 package mode
+import key.MajorKey
 import util.ConstructorUtils
 
 /**
@@ -6,6 +7,8 @@ import util.ConstructorUtils
   */
 case class Ionian(tonic: String) extends Mode {
   override protected val tonicIndex: Int = 0
+
+  override protected implicit val majorKey: MajorKey = MajorKey(tonic).get
 }
 
 object Ionian {
