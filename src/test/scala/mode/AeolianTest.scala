@@ -1,12 +1,13 @@
 package mode
 import key.MinorKey
 import mode.AeolianTest.aeolianModeGen
-import note.{Note, NoteTest}
+import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
 import org.scalatest.propspec.AnyPropSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import scale.NaturalMinorScale
+import util.NoteUtil
 
 /**
   * Property tests for the aeolian mode.
@@ -59,6 +60,6 @@ class AeolianTest
 
 object AeolianTest extends OptionValues {
   val aeolianModeGen: Gen[Aeolian] = for {
-    tonic <- NoteTest.noteLetterGen
+    tonic <- NoteUtil.clearedNoteStringGen
   } yield Aeolian(tonic.toString).value
 }
