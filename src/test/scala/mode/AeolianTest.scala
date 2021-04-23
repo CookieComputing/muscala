@@ -1,4 +1,5 @@
 package mode
+import key.{MajorKey, MinorKey}
 import mode.AeolianTest.aeolianModeGen
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
@@ -24,6 +25,16 @@ class AeolianTest
     forAll(aeolianModeGen) { mode: Aeolian =>
       val minorScale = NaturalMinorScale(mode.tonic).get
       assertResult(minorScale.ascending)(mode.ascending)
+    }
+  }
+
+  property(
+    "an aeolian mode should contain the same notes as the relative " +
+      "major key associated with the minor scale's key") {
+    forAll(aeolianModeGen) { mode: Aeolian =>
+      assertResult(for {
+        minorKey <- MinorKey(mode.tonic)
+      } yield minorKey.relativeMajor.degrees.toSet)(Some(mode.ascending.toSet))
     }
   }
 
