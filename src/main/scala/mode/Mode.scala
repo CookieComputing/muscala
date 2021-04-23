@@ -1,9 +1,8 @@
 package mode
 import interval.diatonic.DiatonicInterval
-import key.{Key, MajorKey}
-import mode.Mode.keyOrdering
+import key.{Direction, Key, KeyNavigator, MajorKey}
 import note.Note
-import scale.{MajorScale, Scale}
+import scale.Scale
 
 import scala.annotation.tailrec
 
@@ -24,30 +23,14 @@ trait Mode extends Scale {
   // the tonic be at a specific index.
   @tailrec
   private def modeConstruction(key: Key = MajorKey("C").get): List[String] = {
-    if (key.degrees(tonicIndex) == tonic)
-      key.degrees.drop(tonicIndex) ++ key.degrees.take(tonicIndex)
-    else if (clockwise(key.degrees(tonicIndex), tonic))
-      modeConstruction(key.dominantKey)
-    else modeConstruction(key.subdominantKey)
-  }
-
-  // Determines if we should go clockwise around the circle of fifths.
-  private def clockwise(currentTonic: String, desiredTonic: String): Boolean = {
-    def accidentalSum(tonic: String) = tonic.drop(1).foldLeft(0) {
-      (acc: Int, c: Char) =>
-        c match {
-          case Note.sharp => acc + 1
-          case Note.flat  => acc - 1
-        }
+    KeyNavigator.directionTowards(key.degrees, tonic, tonicIndex) match {
+      case Direction.Clockwise =>
+        modeConstruction(key.dominantKey)
+      case Direction.CounterClockwise =>
+        modeConstruction(key.subdominantKey)
+      case Direction.None =>
+        key.degrees.drop(tonicIndex) ++ key.degrees.take(tonicIndex)
     }
-    val currentTonicAccidentals = accidentalSum(currentTonic)
-    val desiredTonicAccidentals = accidentalSum(desiredTonic)
-
-    if (currentTonicAccidentals < desiredTonicAccidentals) true
-    else if (currentTonicAccidentals > desiredTonicAccidentals) false
-    else
-      Mode.keyOrdering(currentTonic.head) <
-        Mode.keyOrdering(desiredTonic.head)
   }
 
   private lazy val ascendingCachedResult = modeConstruction()
@@ -70,16 +53,4 @@ trait Mode extends Scale {
       )
     } yield op(root).get
   }
-}
-
-object Mode {
-  private val keyOrdering = Map(
-    'F' -> 1,
-    'C' -> 2,
-    'G' -> 3,
-    'D' -> 4,
-    'A' -> 5,
-    'E' -> 6,
-    'B' -> 7
-  )
 }

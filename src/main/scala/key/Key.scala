@@ -182,46 +182,18 @@ object MinorKey extends KeyBuilder {
   * Abstract logic for major and minor key scale construction
   */
 protected trait KeyBuilder {
-  // used to determine which direction of the circle of fifths to head towards
-  private val keyOrdering = Map(
-    'F' -> 1,
-    'C' -> 2,
-    'G' -> 3,
-    'D' -> 4,
-    'A' -> 5,
-    'E' -> 6,
-    'B' -> 7
-  )
-
   // Generation starts by following the circle of fifths and repeats until
   // the desired key has been generated
   @tailrec
   final def generateScales(startingScales: List[String],
                            tonic: String): List[String] =
-    if (tonic == startingScales.head) startingScales
-    else {
-      val alterKey = (scales: List[String]) =>
-        if (clockwise(startingScales.head, tonic)) rotateKeyClockwise(scales)
-        else rotateKeyCounterClockwise(scales)
-      generateScales(alterKey(startingScales), tonic)
+    KeyNavigator.directionTowards(startingScales, tonic, 0) match {
+      case Direction.Clockwise =>
+        generateScales(rotateKeyClockwise(startingScales), tonic)
+      case Direction.CounterClockwise =>
+        generateScales(rotateKeyCounterClockwise(startingScales), tonic)
+      case Direction.None => startingScales
     }
-
-  // Determines if we should go clockwise around the circle of fifths.
-  private def clockwise(currentTonic: String, desiredTonic: String): Boolean = {
-    def accidentalSum(tonic: String) = tonic.drop(1).foldLeft(0) {
-      (acc: Int, c: Char) =>
-        c match {
-          case Note.sharp => acc + 1
-          case Note.flat  => acc - 1
-        }
-    }
-    val currentTonicAccidentals = accidentalSum(currentTonic)
-    val desiredTonicAccidentals = accidentalSum(desiredTonic)
-
-    if (currentTonicAccidentals < desiredTonicAccidentals) true
-    else if (currentTonicAccidentals > desiredTonicAccidentals) false
-    else keyOrdering(currentTonic.head) < keyOrdering(desiredTonic.head)
-  }
 
   // Given a list of scale degrees, returns the next scale degrees that should
   // be expected on the circle of fifths when rotating clockwise
