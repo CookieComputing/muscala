@@ -1,5 +1,5 @@
 package mode
-import key.{MajorKey, MinorKey}
+import key.MinorKey
 import mode.AeolianTest.aeolianModeGen
 import note.{Note, NoteTest}
 import org.scalacheck.Gen
