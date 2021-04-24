@@ -14,6 +14,10 @@ class ModeTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
+  // Adding larger coverage for ModeTest, since these are general
+  // properties that a mode should have
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = 50)
   property("any mode should have 7 notes") {
     forAll(anyModeGen) { mode: Mode =>
       assertResult(7)(mode.ascending.size)

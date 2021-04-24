@@ -13,6 +13,10 @@ class TertianSeventhChordTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
+  // Adding larger coverage for TertianSeventhChords, since these are general
+  // properties that a seventh chord should have
+  implicit override val generatorDrivenConfig: PropertyCheckConfiguration =
+    PropertyCheckConfiguration(minSuccessful = 50)
   property("a seventh chord should have 4 tones") {
     forAll(seventhChordGen) { seventh: Seventh =>
       assertResult(4)(seventh.tones.size)
