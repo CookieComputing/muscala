@@ -16,12 +16,6 @@ class AeolianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("an aeolian mode should have 7 notes") {
-    forAll(aeolianModeGen) { mode: Aeolian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property("an aeolian mode should have the same notes has the minor scale") {
     forAll(aeolianModeGen) { mode: Aeolian =>
       val minorScale = NaturalMinorScale(mode.tonic).get

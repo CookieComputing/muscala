@@ -15,12 +15,6 @@ class PhrygianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("the phrygian mode should have 7 notes") {
-    forAll(phrygianModeGen) { mode: Phrygian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property(
     "the phrygian mode should be equivalent to the minor scale but " +
       "with a lowered second") {

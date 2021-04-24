@@ -13,12 +13,6 @@ class MixolydianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("the mixolydian mode has 7 notes") {
-    forAll(mixolydianModeGen) { mode: Mixolydian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property(
     "the mixolydian mode is essentially the major scale with a flat " +
       "seventh") {

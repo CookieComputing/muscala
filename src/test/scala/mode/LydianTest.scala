@@ -13,12 +13,6 @@ class LydianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("a lydian mode should have 7 notes") {
-    forAll(lydianModeGen) { mode: Lydian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property(
     "the lydian mode should effectively be the major scale, but the " +
       "fourth degree is sharp") {

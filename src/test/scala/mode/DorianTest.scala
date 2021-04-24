@@ -15,12 +15,6 @@ class DorianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("the dorian mode has 7 notes") {
-    forAll(dorianModeGen) { mode: Dorian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property(
     "the dorian mode should be akin to the minor scale with a raised " +
       "(major) sixth") {

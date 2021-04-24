@@ -12,12 +12,6 @@ class IonianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("the ionian mode should have 7 notes") {
-    forAll(ionianModeGen) { mode: Ionian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property("the ionian mode should have the same scale as the major scale") {
     forAll(for {
       tonic <- NoteUtil.clearedNoteStringGen

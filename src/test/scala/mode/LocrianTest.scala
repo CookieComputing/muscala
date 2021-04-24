@@ -13,12 +13,6 @@ class LocrianTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("the locrian mode has 7 notes") {
-    forAll(locrianModeGen) { mode: Locrian =>
-      assertResult(7)(mode.ascending.size)
-    }
-  }
-
   property("the locrian mode should follow the pattern H-W-W-H-W-W-W") {
     forAll(for {
       mode <- locrianModeGen
