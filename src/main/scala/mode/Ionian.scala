@@ -5,7 +5,7 @@ import util.ConstructorUtils
 /**
   * Represents the Ionian mode, which is effectively the major scale.
   */
-case class Ionian(tonic: String) extends Mode {
+case class Ionian private (tonic: String) extends Mode {
   override protected val tonicIndex: Int = 0
 
   override protected implicit val majorKey: MajorKey = MajorKey(tonic).get

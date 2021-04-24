@@ -5,7 +5,7 @@ import util.ConstructorUtils
 /**
   * Represents the lydian mode.
   */
-case class Lydian(tonic: String) extends Mode {
+case class Lydian private (tonic: String) extends Mode {
   override protected val tonicIndex: Int = 3
 
   override protected implicit val majorKey: MajorKey =

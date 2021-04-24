@@ -5,7 +5,7 @@ import util.ConstructorUtils
 /**
   * Represents the Dorian mode.
   */
-case class Dorian(tonic: String) extends Mode {
+case class Dorian private (tonic: String) extends Mode {
   override protected val tonicIndex: Int = 1
   override protected implicit val majorKey: MajorKey =
     MajorKey(ascending(6)).get

@@ -2,7 +2,7 @@ package mode
 import key.MajorKey
 import util.ConstructorUtils
 
-case class Aeolian(tonic: String) extends Mode {
+case class Aeolian private (tonic: String) extends Mode {
   override protected val tonicIndex = 5
 
   override protected implicit val majorKey: MajorKey =

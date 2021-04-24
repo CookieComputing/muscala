@@ -2,7 +2,7 @@ package mode
 import key.MajorKey
 import util.ConstructorUtils
 
-case class Locrian(tonic: String) extends Mode {
+case class Locrian private (tonic: String) extends Mode {
   override protected val tonicIndex: Int = 6
   override protected implicit val majorKey: MajorKey =
     MajorKey(ascending(1)).get
