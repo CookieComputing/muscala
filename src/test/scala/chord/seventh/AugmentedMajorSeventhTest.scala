@@ -13,12 +13,6 @@ class AugmentedMajorSeventhTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("an augmented major seventh should have 4 chord tones") {
-    forAll(augmentedMajorSeventhChordGen) { seventh: AugmentedMajorSeventh =>
-      assertResult(4)(seventh.tones.size)
-    }
-  }
-
   property(
     "an augmented major seventh should have the appropriate notes from an" +
       "augmented triad and major seventh") {

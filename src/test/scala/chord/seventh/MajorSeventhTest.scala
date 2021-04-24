@@ -16,12 +16,6 @@ class MajorSeventhTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("a major seventh should have 4 chord tones") {
-    forAll(majorSeventhChordGen) { seventh: MajorSeventh =>
-      assertResult(4)(seventh.tones.size)
-    }
-  }
-
   property(
     "a major seventh should use the root, third, fifth, and seventh " +
       "from a major key of it's tonic") {

@@ -13,12 +13,6 @@ class HalfDiminishedSeventhTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("a half diminished seventh should have 4 chord tones") {
-    forAll(halfDiminishedSeventhChordGen) { seventh: HalfDiminishedSeventh =>
-      assertResult(4)(seventh.tones.size)
-    }
-  }
-
   property(
     "a half diminished seventh should have the appropriate notes from a " +
       "diminished triad and minor seventh") {

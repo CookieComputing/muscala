@@ -13,12 +13,6 @@ class MinorSeventhTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("a minor seventh should have 4 chord tones") {
-    forAll(minorSeventhChordGen) { seventh: MinorSeventh =>
-      assertResult(4)(seventh.tones.size)
-    }
-  }
-
   property(
     "a minor seventh should use the root, third, fifth, and seventh " +
       "from a minor key of it's tonic") {

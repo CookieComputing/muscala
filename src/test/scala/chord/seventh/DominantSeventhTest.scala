@@ -16,12 +16,6 @@ class DominantSeventhTest
     extends AnyPropSpec
     with ScalaCheckPropertyChecks
     with OptionValues {
-  property("a dominant seventh should have 4 chord tones") {
-    forAll(dominantSeventhChordGen) { seventh: DominantSeventh =>
-      assertResult(4)(seventh.tones.size)
-    }
-  }
-
   property(
     "a dominant seventh should have the appropriate notes from a " +
       "major triad and minor seventh") {
