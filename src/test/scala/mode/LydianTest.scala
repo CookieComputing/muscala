@@ -105,6 +105,19 @@ class LydianTest
       )
     }
   }
+
+  property("the lydian mode's fourth should be a tritone with the tonic") {
+    forAll(for {
+      mode <- lydianModeGen
+      octave <- Gen.chooseNum(-10000, 10000)
+    } yield (mode, octave)) {
+      case (mode: Lydian, octave: Int) =>
+        val notes = mode.toNotes(octave)
+        assert(
+          Note.enharmonic(notes.head.tritone, notes(3))
+        )
+    }
+  }
 }
 
 object LydianTest extends OptionValues {
