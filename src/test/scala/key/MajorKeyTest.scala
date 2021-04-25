@@ -151,6 +151,24 @@ class MajorKeyTest
       assert(majorKey.isTheoreticalKey)
     }
   }
+
+  property(
+    "the key signature of a major key should only return notes with " +
+      "accidentals in them"
+  ) {
+    forAll(majorKeyGen) { key: MajorKey =>
+      assert(key.signature.forall(s =>
+        s.contains(Note.flat) || s.contains(Note.sharp)))
+    }
+  }
+
+  property(
+    "the key signature is a subset of the degrees of a major key"
+  ) {
+    forAll(majorKeyGen) { key: MajorKey =>
+      assert(key.signature.toSet.subsetOf(key.degrees.toSet))
+    }
+  }
 }
 
 // Utility for generating

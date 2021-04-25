@@ -42,6 +42,15 @@ sealed trait Key {
   def isTheoreticalKey: Boolean =
     degrees.exists(note =>
       note.count(c => c == Note.flat || c == Note.sharp) > 1)
+
+  /**
+    * Returns the key signature of this key. That is, any note that is not a
+    * natural note will be returned. For theoretical keys, this is largely
+    * useless as it effectively just return the degrees of the key.
+    * @return any notes in the key that contain accidentals
+    */
+  def signature: List[String] =
+    degrees.filter(s => s.contains(Note.flat) || s.contains(Note.sharp))
 }
 
 /**

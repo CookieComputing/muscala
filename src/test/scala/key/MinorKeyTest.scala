@@ -151,6 +151,24 @@ class MinorKeyTest
       assert(minorKey.isTheoreticalKey)
     }
   }
+
+  property(
+    "the key signature of a minor key should only return notes with " +
+      "accidentals in them"
+  ) {
+    forAll(minorKeyGen) { key: MinorKey =>
+      assert(key.signature.forall(s =>
+        s.contains(Note.flat) || s.contains(Note.sharp)))
+    }
+  }
+
+  property(
+    "the key signature is a subset of the degrees of a minor key"
+  ) {
+    forAll(minorKeyGen) { key: MinorKey =>
+      assert(key.signature.toSet.subsetOf(key.degrees.toSet))
+    }
+  }
 }
 
 // Utility for generating
