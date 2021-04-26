@@ -8,20 +8,6 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import util.NoteUtil
 
 class AugmentedTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
-  property("an augmented triad should have three tones") {
-    forAll(augmentedTriadGen) { triad: AugmentedTriad =>
-      assert(triad.tones.size == 3)
-    }
-  }
-
-  property(
-    "when converting to actual notes, the notes return should match " +
-      "the tones of the triad") {
-    forAll(augmentedTriadGen) { triad: AugmentedTriad =>
-      assertResult(triad.tones)(triad.toNotes().map(_.name))
-    }
-  }
-
   property(
     "an augmented triad should be a major third, and a major third stacked " +
       "on top") {

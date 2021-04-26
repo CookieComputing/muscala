@@ -8,20 +8,6 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import util.NoteUtil
 
 class DiminishedTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
-  property("a diminished triad should have three tones") {
-    forAll(diminishedTriadGen) { triad: DiminishedTriad =>
-      assert(triad.tones.size == 3)
-    }
-  }
-
-  property(
-    "when converting to actual notes, the notes return should match " +
-      "the tones of the triad") {
-    forAll(diminishedTriadGen) { triad: DiminishedTriad =>
-      assertResult(triad.tones)(triad.toNotes().map(_.name))
-    }
-  }
-
   property(
     "a diminished triad should be a minor third, and a minor third stacked " +
       "on top") {

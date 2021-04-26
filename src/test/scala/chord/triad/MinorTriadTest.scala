@@ -8,20 +8,6 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import util.NoteUtil
 
 class MinorTriadTest extends AnyPropSpec with ScalaCheckPropertyChecks {
-  property("a minor triad should have three tones") {
-    forAll(minorTriadGen) { triad: MinorTriad =>
-      assert(triad.tones.size == 3)
-    }
-  }
-
-  property(
-    "when converting to actual notes, the notes return should match " +
-      "the tones of the triad") {
-    forAll(minorTriadGen) { triad: MinorTriad =>
-      assertResult(triad.tones)(triad.toNotes().map(_.name))
-    }
-  }
-
   property(
     "a minor triad should be a minor third, and a major third stacked " +
       "on top") {
