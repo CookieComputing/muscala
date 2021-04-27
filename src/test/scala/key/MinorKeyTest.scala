@@ -24,38 +24,6 @@ class MinorKeyTest
     }
   }
 
-  property("a minor key's scales should not have conflicting accidentals") {
-    forAll(minorKeyGen) { key: MinorKey =>
-      def accidentalCount(note: String) =
-        (note.count(_ == Note.flat), note.count(_ == Note.sharp))
-      def onlyOneAccidentalType(note: String) = {
-        val (flats, sharps) = accidentalCount(note)
-        (flats > 0 && sharps == 0) || (flats == 0 && sharps > 0) || (flats ==
-          0 && sharps == 0)
-      }
-      assert(key.degrees.forall(onlyOneAccidentalType))
-    }
-  }
-
-  property("a minor key should have 7 unique letters in its scales") {
-    forAll(minorKeyGen) { key: MinorKey =>
-      assert(
-        key.degrees.toSet.size == key.degrees.size &&
-          key.degrees.size == 7)
-    }
-  }
-
-  property(
-    "a minor key should have 7 unique letters in its scales even when" +
-      "adjusted via Note.nearestNote()") {
-    forAll(minorKeyGen) { key: MinorKey =>
-      val adjustedKeyNotes = key.degrees.map(Note(_).get.nearestNote)
-      assert(
-        adjustedKeyNotes.toSet.size == adjustedKeyNotes.size &&
-          adjustedKeyNotes.size == 7)
-    }
-  }
-
   property("a minor key should have the same notes as its relative major") {
     forAll(minorKeyGen) { key: MinorKey =>
       assert(key.degrees.toSet == key.relativeMajor.degrees.toSet)
