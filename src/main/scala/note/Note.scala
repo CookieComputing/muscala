@@ -225,6 +225,16 @@ object Note {
     Math.floorMod(distance(note, otherNote), halfStepsInOctave) == 0
 
   /**
+    * Determines if the two notes are the same note, but possibly on different
+    * octaves.
+    * @param note the first note to check
+    * @param otherNote the second note to compare with
+    * @return whether these two notes are the same note but on different octaves
+    */
+  def octaveEquivalent(note: Note, otherNote: Note): Boolean =
+    similarNotes(note, otherNote) && note.name == otherNote.name
+
+  /**
     * Sharps the name by dropping a flat accidental or adding a sharp accidental
     * @param name the given note name
     * @return a sharpened equivalent of that note name

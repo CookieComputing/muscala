@@ -289,6 +289,34 @@ class NoteTest
     }
   }
 
+  property(
+    "if two notes are octave equivalent, then they are similar"
+  ) {
+    forAll(for {
+      note <- noteGen
+      octaveShift <- Gen.chooseNum(-10000, 10000)
+    } yield (note, Note(note.name, note.rank + octaveShift).value)) {
+      case (note, otherNote) =>
+        assert(
+          Note.octaveEquivalent(note, otherNote) &&
+            Note.similarNotes(note, otherNote))
+    }
+  }
+
+  property(
+    "a similar note may not necessarily be octave equivalent"
+  ) {
+    forAll(noteGen) { note =>
+      assert(
+        Note.similarNotes(note.flat.sharp, note) &&
+          !Note.octaveEquivalent(note.flat.sharp, note) &&
+          Note.similarNotes(note.perfect.octave, note) &&
+          !Note.octaveEquivalent(note.perfect.octave, note) &&
+          Note.similarNotes(Note(note.name, note.octave + 1).value, note) &&
+          Note.octaveEquivalent(Note(note.name, note.octave + 1).value, note))
+    }
+  }
+
   property("enharmonic notes are similar") {
     forAll(for {
       note <- noteGen
