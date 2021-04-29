@@ -1,4 +1,5 @@
 package mode
+import interval.absolute.Interval.{halfStep, wholeStep}
 import mode.DorianTest.dorianModeGen
 import note.Note
 import org.scalacheck.Gen
@@ -34,13 +35,13 @@ class DorianTest
       case (mode: Dorian, octave: Int) =>
         val notes = mode.toNotes(octave)
         assert(
-          Note.distance(notes.head, notes(1)) == 2 &&
-            Note.distance(notes(1), notes(2)) == 1 &&
-            Note.distance(notes(2), notes(3)) == 2 &&
-            Note.distance(notes(3), notes(4)) == 2 &&
-            Note.distance(notes(4), notes(5)) == 2 &&
-            Note.distance(notes(5), notes(6)) == 1 &&
-            Note.distance(notes(6), notes.head.perfect.octave) == 2)
+          Note.distance(notes.head, notes(1)) == wholeStep &&
+            Note.distance(notes(1), notes(2)) == halfStep &&
+            Note.distance(notes(2), notes(3)) == wholeStep &&
+            Note.distance(notes(3), notes(4)) == wholeStep &&
+            Note.distance(notes(4), notes(5)) == wholeStep &&
+            Note.distance(notes(5), notes(6)) == halfStep &&
+            Note.distance(notes(6), notes.head.perfect.octave) == wholeStep)
     }
   }
 

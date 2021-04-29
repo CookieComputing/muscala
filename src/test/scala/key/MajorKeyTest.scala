@@ -1,4 +1,5 @@
 package key
+import interval.absolute.Interval.{halfStep, wholeStep}
 import interval.diatonic.DiatonicInterval
 import key.MajorKeyTest.{circleOfFifthsTable, majorKeyGen}
 import note.Note
@@ -49,10 +50,17 @@ class MajorKeyTest
 
   property("a major key should follow the W-W-H-W-W-W-H pattern") {
     forAll(majorKeyGen) { key: MajorKey =>
-      (key.degrees zip List(2, 2, 1, 2, 2, 2, 1)).forall(tup => {
-        val note = Note(tup._1).get
-        Note.distance(note, DiatonicInterval.second(note)(key).get) == tup._2
-      })
+      (key.degrees zip List(wholeStep,
+                            wholeStep,
+                            halfStep,
+                            wholeStep,
+                            wholeStep,
+                            wholeStep,
+                            halfStep))
+        .forall(tup => {
+          val note = Note(tup._1).get
+          Note.distance(note, DiatonicInterval.second(note)(key).get) == tup._2
+        })
     }
   }
 

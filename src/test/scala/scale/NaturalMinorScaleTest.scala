@@ -6,6 +6,7 @@ import chord.seventh.{
   MinorSeventh
 }
 import chord.triad.{DiminishedTriad, MajorTriad, MinorTriad}
+import interval.absolute.Interval.{halfStep, wholeStep}
 import note.Note
 import org.scalacheck.Gen
 import org.scalatest.OptionValues
@@ -44,13 +45,13 @@ class NaturalMinorScaleTest extends AnyPropSpec with ScalaCheckPropertyChecks {
       case (scale: NaturalMinorScale, octave: Int) =>
         val notes = scale.toNotes(octave)
         assert(
-          Note.distance(notes.head, notes(1)) == 2 &&
-            Note.distance(notes(1), notes(2)) == 1 &&
-            Note.distance(notes(2), notes(3)) == 2 &&
-            Note.distance(notes(3), notes(4)) == 2 &&
-            Note.distance(notes(4), notes(5)) == 1 &&
-            Note.distance(notes(5), notes(6)) == 2 &&
-            Note.distance(notes(6), notes.head.perfect.octave) == 2
+          Note.distance(notes.head, notes(1)) == wholeStep &&
+            Note.distance(notes(1), notes(2)) == halfStep &&
+            Note.distance(notes(2), notes(3)) == wholeStep &&
+            Note.distance(notes(3), notes(4)) == wholeStep &&
+            Note.distance(notes(4), notes(5)) == halfStep &&
+            Note.distance(notes(5), notes(6)) == wholeStep &&
+            Note.distance(notes(6), notes.head.perfect.octave) == wholeStep
         )
     }
   }

@@ -1,4 +1,5 @@
 package mode
+import interval.absolute.Interval.{halfStep, wholeStep}
 import mode.IonianTest.ionianModeGen
 import note.Note
 import org.scalacheck.Gen
@@ -33,13 +34,13 @@ class IonianTest
       case (mode: Mode, octave: Int) =>
         val notes = mode.toNotes(octave)
         assert(
-          Note.distance(notes.head, notes(1)) == 2 &&
-            Note.distance(notes(1), notes(2)) == 2 &&
-            Note.distance(notes(2), notes(3)) == 1 &&
-            Note.distance(notes(3), notes(4)) == 2 &&
-            Note.distance(notes(4), notes(5)) == 2 &&
-            Note.distance(notes(5), notes(6)) == 2 &&
-            Note.distance(notes(6), notes.head.perfect.octave) == 1
+          Note.distance(notes.head, notes(1)) == wholeStep &&
+            Note.distance(notes(1), notes(2)) == wholeStep &&
+            Note.distance(notes(2), notes(3)) == halfStep &&
+            Note.distance(notes(3), notes(4)) == wholeStep &&
+            Note.distance(notes(4), notes(5)) == wholeStep &&
+            Note.distance(notes(5), notes(6)) == wholeStep &&
+            Note.distance(notes(6), notes.head.perfect.octave) == halfStep
         )
     }
   }

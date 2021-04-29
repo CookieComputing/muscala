@@ -1,4 +1,5 @@
 package key
+import interval.absolute.Interval.{halfStep, wholeStep}
 import interval.diatonic.DiatonicInterval
 import key.MinorKeyTest.{circleOfFifthsTable, minorKeyGen}
 import note.Note
@@ -49,10 +50,17 @@ class MinorKeyTest
 
   property("a minor key should follow the W-H-W-W-H-W-W pattern") {
     forAll(minorKeyGen) { key: MinorKey =>
-      (key.degrees zip List(2, 1, 2, 2, 1, 2, 2)).forall(tup => {
-        val note = Note(tup._1).get
-        Note.distance(note, DiatonicInterval.second(note)(key).get) == tup._2
-      })
+      (key.degrees zip List(wholeStep,
+                            halfStep,
+                            wholeStep,
+                            wholeStep,
+                            halfStep,
+                            wholeStep,
+                            wholeStep))
+        .forall(tup => {
+          val note = Note(tup._1).get
+          Note.distance(note, DiatonicInterval.second(note)(key).get) == tup._2
+        })
     }
   }
 
