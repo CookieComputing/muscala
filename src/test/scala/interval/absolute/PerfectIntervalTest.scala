@@ -44,6 +44,16 @@ class PerfectIntervalTest extends AnyPropSpec with ScalaCheckPropertyChecks {
   }
 
   property(
+    "for each octave, there is a fifth and a fourth that can be " +
+      "attached to each other") {
+    forAll(noteGen) { note =>
+      assert(Note.enharmonic(note.perfect.octave,
+                             note.perfect.fourth.perfect.fifth) &&
+        Note.enharmonic(note.perfect.octave, note.perfect.fifth.perfect.fourth))
+    }
+  }
+
+  property(
     "creating a perfect octave should be equivalent to creating " +
       "another note with the same name but an increased octave by one") {
     forAll(noteGen) { note: Note =>
